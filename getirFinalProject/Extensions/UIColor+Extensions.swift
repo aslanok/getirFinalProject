@@ -19,6 +19,9 @@ extension UIColor{
         static var white : UIColor{
             return UIColor.white
         }
+        static var lightPurple : UIColor {
+            return UIColor(red: 242/255, green: 240/255, blue: 250/255, alpha: 1)
+        }
     }
 
     

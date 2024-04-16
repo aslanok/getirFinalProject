@@ -16,6 +16,8 @@
 		BED4BBBD2BCF1F1A008FA153 /* MainPagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBBC2BCF1F1A008FA153 /* MainPagePresenter.swift */; };
 		BED4BBC02BCF21A5008FA153 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBBF2BCF21A5008FA153 /* UIColor+Extensions.swift */; };
 		BED4BBC72BCF2780008FA153 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BED4BBC62BCF2780008FA153 /* OpenSans-Bold.ttf */; };
+		BED4BBCA2BCF2DC0008FA153 /* CustomRoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBC92BCF2DC0008FA153 /* CustomRoundedView.swift */; };
+		BED4BBCC2BCF3374008FA153 /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBCB2BCF3374008FA153 /* ProductCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		BED4BBBC2BCF1F1A008FA153 /* MainPagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPagePresenter.swift; sourceTree = "<group>"; };
 		BED4BBBF2BCF21A5008FA153 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		BED4BBC62BCF2780008FA153 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "../../../../../Downloads/Open_Sans/static/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		BED4BBC92BCF2DC0008FA153 /* CustomRoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRoundedView.swift; sourceTree = "<group>"; };
+		BED4BBCB2BCF3374008FA153 /* ProductCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,7 @@
 		BED4BBA02BCF1936008FA153 /* getirFinalProject */ = {
 			isa = PBXGroup;
 			children = (
+				BED4BBC82BCF2DAE008FA153 /* Components */,
 				BED4BBBE2BCF2196008FA153 /* Extensions */,
 				BED4BBB52BCF1D8A008FA153 /* Modules */,
 				BED4BBA12BCF1936008FA153 /* AppDelegate.swift */,
@@ -89,6 +94,7 @@
 				BED4BBB82BCF1DBF008FA153 /* MainPageViewController.swift */,
 				BED4BBBA2BCF1E15008FA153 /* MainPageRouter.swift */,
 				BED4BBBC2BCF1F1A008FA153 /* MainPagePresenter.swift */,
+				BED4BBCB2BCF3374008FA153 /* ProductCollectionViewCell.swift */,
 			);
 			path = MainPage;
 			sourceTree = "<group>";
@@ -114,6 +120,14 @@
 				BED4BBC62BCF2780008FA153 /* OpenSans-Bold.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		BED4BBC82BCF2DAE008FA153 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				BED4BBC92BCF2DC0008FA153 /* CustomRoundedView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,10 +203,12 @@
 			files = (
 				BED4BBBD2BCF1F1A008FA153 /* MainPagePresenter.swift in Sources */,
 				BED4BBB92BCF1DBF008FA153 /* MainPageViewController.swift in Sources */,
+				BED4BBCC2BCF3374008FA153 /* ProductCollectionViewCell.swift in Sources */,
 				BED4BBBB2BCF1E15008FA153 /* MainPageRouter.swift in Sources */,
 				BED4BBC02BCF21A5008FA153 /* UIColor+Extensions.swift in Sources */,
 				BED4BBA22BCF1936008FA153 /* AppDelegate.swift in Sources */,
 				BED4BBA42BCF1936008FA153 /* SceneDelegate.swift in Sources */,
+				BED4BBCA2BCF2DC0008FA153 /* CustomRoundedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
