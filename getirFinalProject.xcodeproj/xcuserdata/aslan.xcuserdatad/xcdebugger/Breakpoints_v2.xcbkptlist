@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "C3D39A53-85E3-41D5-A0AB-2BC3A513E5E9"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "59B79E7D-B386-49CF-9042-70C2D7BC1107"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "getirFinalProject/Modules/MainPage/MainPagePresenter.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "fetchAllProducts()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B6E45FF4-CD2E-4C4E-9875-4934C1AC2DF6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "getirFinalProject/Modules/MainPage/MainPageInteractor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "executeAllProducts()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B6E45FF4-CD2E-4C4E-9875-4934C1AC2DF6 - c13eff0b3796fac3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;getirFinalProject.AllProductsResponse, getirFinalProject.NetworkError&gt;) -&gt; () in getirFinalProject.MainPageInteractor.executeAllProducts() -&gt; ()"
+                  moduleName = "getirFinalProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aslan/Documents/iOS/getirFinalProject/getirFinalProject/Modules/MainPage/MainPageInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "33"
+                  endingLineNumber = "33"
+                  offsetFromSymbolStart = "480">
+               </Location>
+               <Location
+                  uuid = "B6E45FF4-CD2E-4C4E-9875-4934C1AC2DF6 - e4a9456b2b103ba1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Swift.Array&lt;getirFinalProject.AllProductsResponse&gt;, getirFinalProject.NetworkError&gt;) -&gt; () in getirFinalProject.MainPageInteractor.executeAllProducts() -&gt; ()"
+                  moduleName = "getirFinalProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aslan/Documents/iOS/getirFinalProject/getirFinalProject/Modules/MainPage/MainPageInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "33"
+                  endingLineNumber = "33"
+                  offsetFromSymbolStart = "128">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A2F3E09-40EC-4234-AA6B-27193A142637"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "getirFinalProject/Modules/MainPage/MainPageInteractor.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "executeAllProducts()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8A2F3E09-40EC-4234-AA6B-27193A142637 - c13eff0b3796fa05"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;getirFinalProject.AllProductsResponse, getirFinalProject.NetworkError&gt;) -&gt; () in getirFinalProject.MainPageInteractor.executeAllProducts() -&gt; ()"
+                  moduleName = "getirFinalProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aslan/Documents/iOS/getirFinalProject/getirFinalProject/Modules/MainPage/MainPageInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "676">
+               </Location>
+               <Location
+                  uuid = "8A2F3E09-40EC-4234-AA6B-27193A142637 - e4a9456b2b103b67"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Swift.Array&lt;getirFinalProject.AllProductsResponse&gt;, getirFinalProject.NetworkError&gt;) -&gt; () in getirFinalProject.MainPageInteractor.executeAllProducts() -&gt; ()"
+                  moduleName = "getirFinalProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aslan/Documents/iOS/getirFinalProject/getirFinalProject/Modules/MainPage/MainPageInteractor.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "292">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

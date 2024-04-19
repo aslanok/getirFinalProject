@@ -16,9 +16,12 @@ class MainPageRouter : MainPageRouting{
     
     var viewController : UIViewController {
         let view = MainPageViewController()
-        let presenter = MainPagePresenter(router: self, view: view)
+        let interactor = MainPageInteractor()
+        
+        let presenter = MainPagePresenter(router: self, view: view, interactor: interactor)
         
         view.presenter = presenter
+        interactor.output = presenter
         presenter.output = view
         return view
     }

@@ -15,6 +15,13 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     
     var presenter : MainPagePresentation?
     
+    private lazy var headerView : UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .Theme.primaryColor
+        return view
+    }()
+    
     private lazy var titleLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -61,10 +68,10 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 140, height: 140) // Adjust size as needed
+        //layout.itemSize = CGSize(width: 140, height: 140) // Adjust size as needed
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .Theme.white
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -77,10 +84,9 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
-        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .white
         collectionView.showsVerticalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -92,16 +98,22 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .Theme.primaryColor
+        view.backgroundColor = .Theme.viewBackgroundColor
         setupUI()
+        presenter?.fetchAllProducts()
         
     }
     
     func setupUI(){
-        view.addSubview(titleLabel)
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        view.addSubview(headerView)
+        headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        headerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        
+        headerView.addSubview(titleLabel)
+        titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
         titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12).isActive = true
-        //titleLabel.widthAnchor.co
         
         view.addSubview(basketMiniView)
         basketMiniView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
@@ -126,14 +138,14 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         miniBasketAmountLabel.centerYAnchor.constraint(equalTo: miniBasketAmountLabelView.centerYAnchor).isActive = true
         
         view.addSubview(horizontalCollectionView)
-        horizontalCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
-        horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        horizontalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        horizontalCollectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        horizontalCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20).isActive = true
+        horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        horizontalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        horizontalCollectionView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
         view.addSubview(verticalCollectionView)
-        verticalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 20).isActive = true
-        verticalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        verticalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 0).isActive = true
+        verticalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         verticalCollectionView.topAnchor.constraint(equalTo: horizontalCollectionView.bottomAnchor, constant: 20).isActive = true
         verticalCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
@@ -152,7 +164,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
             fatalError("Unable to dequeue ProductCell")
         }
                 // Configure the cell
-        cell.backgroundColor = .lightGray // Example configuration
+        //cell.backgroundColor = .lightGray // Example configuration
         return cell
     }
     
