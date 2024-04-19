@@ -205,7 +205,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
                 cell.configure(with: _allProductList[0].products?[indexPath.row])
             }
         }
-        //cell.backgroundColor = .lightGray // Example configuration
+        cell.delegate = self
         return cell
     }
     
@@ -222,5 +222,25 @@ extension MainPageViewController: UICollectionViewDelegateFlowLayout {
             let collectionViewSize = collectionView.frame.size.width - padding * 4
             return CGSize(width: collectionViewSize / 3, height: 150)
         }
+    }
+}
+
+extension MainPageViewController : ProductCellButtonDelegate{
+    func didTapPlusButton(in cell: UICollectionViewCell) {
+        var indexPathForHorizontal : Int?
+        var indexPathForVertical : Int?
+        indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
+        indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
+        
+        
+        var product = ProductResponse(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil)
+        
+        if indexPathForHorizontal == nil{
+            product = _allProductList[0].products?[indexPathForVertical ?? 0] ?? ProductResponse(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil)
+        }else{
+            product = _suggestedProductList[0].products[indexPathForHorizontal ?? 0]
+        }
+        
+        presenter?.goPresentDetailPage(product: product)
     }
 }

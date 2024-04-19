@@ -10,6 +10,7 @@ import Foundation
 protocol MainPagePresentation{
     func fetchAllProducts()
     func fetchSuggestedProducts()
+    func goPresentDetailPage(product : ProductResponse)
 }
 
 
@@ -23,6 +24,10 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
         self.output = view
         self.router = router
         self.interactor = interactor
+    }
+    
+    func goPresentDetailPage(product: ProductResponse) {
+        router.presentDetailPage(product: product,from: output)
     }
     
     func fetchAllProducts() {

@@ -8,15 +8,20 @@
 import UIKit
 import SDWebImage
 
+protocol ProductCellButtonDelegate : AnyObject{
+    func didTapPlusButton(in cell: UICollectionViewCell)
+}
+
 class ProductCell: UICollectionViewCell {
-    // Define UI elements
+
+    weak var delegate : ProductCellButtonDelegate?
+    
     private lazy var productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
-        imageView.sd_setImage(with: URL(string: "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png"))
         imageView.layer.borderColor = UIColor.Theme.lightPurple.cgColor
         imageView.layer.borderWidth = 1
         return imageView
@@ -40,7 +45,7 @@ class ProductCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.text = "₺0,00"
         label.textAlignment = .left
-        label.font = UIFont(name: "OpenSans-Bold", size: 14)
+        label.font = UIFont(name: "OpenSans-SemiBold", size: 14)
         label.textColor = .Theme.primaryColor  // Makes the price stand out
         return label
     }()
@@ -48,8 +53,8 @@ class ProductCell: UICollectionViewCell {
     private lazy var attributeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .Theme.darkText  // Makes the price stand out
+        label.textColor = .Theme.grayText
+        label.font = UIFont(name: "OpenSans-SemiBold", size: 12)
         label.textAlignment = .left
         label.text = "Attribute"
         return label
@@ -59,6 +64,7 @@ class ProductCell: UICollectionViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "plusIcon"), for: .normal)
+        button.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -119,6 +125,11 @@ class ProductCell: UICollectionViewCell {
             attributeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             attributeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
         ])
+    }
+    
+    @objc func plusButtonTapped(){
+        delegate?.didTapPlusButton(in: self)
+        print("plus Tapped")
     }
     
     // Configure cell with data
