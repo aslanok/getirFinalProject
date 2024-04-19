@@ -13,7 +13,7 @@ protocol DetailPageRouting{
 
 
 class DetailPageRouter : DetailPageRouting{
-    func viewController(product : ProductResponse) -> UIViewController {
+    func viewController(product : ProductDataModel) -> UIViewController {
         let view = DetailPageViewController(product : product)
         let presenter = DetailPagePresenter(output: view, router: self)
         view.modalPresentationStyle = .fullScreen

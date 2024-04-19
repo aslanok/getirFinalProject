@@ -10,7 +10,7 @@ import Foundation
 protocol MainPagePresentation{
     func fetchAllProducts()
     func fetchSuggestedProducts()
-    func goPresentDetailPage(product : ProductResponse)
+    func goPresentDetailPage(product : ProductDataModel)
 }
 
 
@@ -26,7 +26,7 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
         self.interactor = interactor
     }
     
-    func goPresentDetailPage(product: ProductResponse) {
+    func goPresentDetailPage(product: ProductDataModel) {
         router.presentDetailPage(product: product,from: output)
     }
     
@@ -39,7 +39,11 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
     }
     
     func setFetchAllProductDataSuccess(result: [AllProductsResponse]) {
-        output.allProductsFetched(productList: result)
+        
+        let modelledList = result[0].products!.map { product -> ProductDataModel in
+            ProductDataModel(id: product.id, imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: product.shortDescription, category: product.category, unitPrice: product.unitPrice, squareThumbnailURL: product.squareThumbnailURL, status: product.status, attribute: product.attribute, thumbnailURL: product.thumbnailURL, productCount: 0)
+        }
+        output.allProductsFetched(productList: modelledList)
     }
     
     func setFetchAllProductDataFailed(error: String) {
@@ -47,7 +51,12 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
     }
     
     func setFetchSuggestedProductDataSuccess(result: [SuggestedProductsResponse]) {
-        output.suggestedProductsFetched(productList: result)
+        
+        let modelledList = result[0].products.map { product -> ProductDataModel in
+            ProductDataModel(id: product.id, imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: product.shortDescription, category: product.category, unitPrice: product.unitPrice, squareThumbnailURL: product.squareThumbnailURL, status: product.status, attribute: product.attribute, thumbnailURL: product.thumbnailURL, productCount: 0)
+        }
+        
+        output.suggestedProductsFetched(productList: modelledList)
     }
     
     func setFetchSuggestedProductDataFailed(error: String) {

@@ -19,6 +19,9 @@
 		BEC2D2E72BD2A6B3007A982C /* DetailPageRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2D2E62BD2A6B3007A982C /* DetailPageRouter.swift */; };
 		BEC2D2E92BD2AADD007A982C /* DetailPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2D2E82BD2AADD007A982C /* DetailPageViewController.swift */; };
 		BEC2D2EB2BD2AB1A007A982C /* DetailPagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2D2EA2BD2AB1A007A982C /* DetailPagePresenter.swift */; };
+		BEC2D2EE2BD2D1BB007A982C /* ProductDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2D2ED2BD2D1BB007A982C /* ProductDataModel.swift */; };
+		BEC2D2F02BD3130B007A982C /* CountableBasketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2D2EF2BD3130B007A982C /* CountableBasketView.swift */; };
+		BEC2D2F22BD329E1007A982C /* BasketMiniView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC2D2F12BD329E1007A982C /* BasketMiniView.swift */; };
 		BED4BBA22BCF1936008FA153 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBA12BCF1936008FA153 /* AppDelegate.swift */; };
 		BED4BBA42BCF1936008FA153 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBA32BCF1936008FA153 /* SceneDelegate.swift */; };
 		BED4BBAB2BCF1937008FA153 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BED4BBAA2BCF1937008FA153 /* Assets.xcassets */; };
@@ -43,6 +46,9 @@
 		BEC2D2E62BD2A6B3007A982C /* DetailPageRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageRouter.swift; sourceTree = "<group>"; };
 		BEC2D2E82BD2AADD007A982C /* DetailPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPageViewController.swift; sourceTree = "<group>"; };
 		BEC2D2EA2BD2AB1A007A982C /* DetailPagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPagePresenter.swift; sourceTree = "<group>"; };
+		BEC2D2ED2BD2D1BB007A982C /* ProductDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDataModel.swift; sourceTree = "<group>"; };
+		BEC2D2EF2BD3130B007A982C /* CountableBasketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountableBasketView.swift; sourceTree = "<group>"; };
+		BEC2D2F12BD329E1007A982C /* BasketMiniView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketMiniView.swift; sourceTree = "<group>"; };
 		BED4BB9E2BCF1936008FA153 /* getirFinalProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = getirFinalProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BED4BBA12BCF1936008FA153 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BED4BBA32BCF1936008FA153 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +104,14 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
+		BEC2D2EC2BD2D1AC007A982C /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				BEC2D2ED2BD2D1BB007A982C /* ProductDataModel.swift */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
 		BED4BB952BCF1936008FA153 = {
 			isa = PBXGroup;
 			children = (
@@ -117,7 +131,9 @@
 		BED4BBA02BCF1936008FA153 /* getirFinalProject */ = {
 			isa = PBXGroup;
 			children = (
+				BEC2D2EC2BD2D1AC007A982C /* DataModel */,
 				BE22185D2BD1E50400977CE2 /* Enums */,
+				BED4BBC22BCF25EC008FA153 /* Fonts */,
 				BE2218532BD1E0CC00977CE2 /* Networking */,
 				BED4BBC82BCF2DAE008FA153 /* Components */,
 				BED4BBBE2BCF2196008FA153 /* Colors */,
@@ -127,7 +143,6 @@
 				BED4BBAA2BCF1937008FA153 /* Assets.xcassets */,
 				BED4BBAC2BCF1937008FA153 /* LaunchScreen.storyboard */,
 				BED4BBAF2BCF1937008FA153 /* Info.plist */,
-				BED4BBC22BCF25EC008FA153 /* Fonts */,
 			);
 			path = getirFinalProject;
 			sourceTree = "<group>";
@@ -184,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				BED4BBC92BCF2DC0008FA153 /* CustomRoundedView.swift */,
+				BEC2D2EF2BD3130B007A982C /* CountableBasketView.swift */,
+				BEC2D2F12BD329E1007A982C /* BasketMiniView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -272,10 +289,13 @@
 				BEC2D2E72BD2A6B3007A982C /* DetailPageRouter.swift in Sources */,
 				BED4BBB92BCF1DBF008FA153 /* MainPageViewController.swift in Sources */,
 				BED4BBCC2BCF3374008FA153 /* ProductCollectionViewCell.swift in Sources */,
+				BEC2D2F22BD329E1007A982C /* BasketMiniView.swift in Sources */,
 				BE2218582BD1E22500977CE2 /* SuggestedProductResponse.swift in Sources */,
 				BED4BBBB2BCF1E15008FA153 /* MainPageRouter.swift in Sources */,
 				BE22185F2BD1E51B00977CE2 /* NetworkingEnums.swift in Sources */,
 				BEC2D2EB2BD2AB1A007A982C /* DetailPagePresenter.swift in Sources */,
+				BEC2D2F02BD3130B007A982C /* CountableBasketView.swift in Sources */,
+				BEC2D2EE2BD2D1BB007A982C /* ProductDataModel.swift in Sources */,
 				BEC2D2E92BD2AADD007A982C /* DetailPageViewController.swift in Sources */,
 				BED4BBC02BCF21A5008FA153 /* UIColor+Extensions.swift in Sources */,
 				BE2218612BD1E56D00977CE2 /* MainPageInteractor.swift in Sources */,

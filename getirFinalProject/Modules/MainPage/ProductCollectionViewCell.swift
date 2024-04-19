@@ -133,11 +133,11 @@ class ProductCell: UICollectionViewCell {
     }
     
     // Configure cell with data
-    func configure(with product: ProductResponse?) {
-        productImageView.sd_setImage(with: URL(string: product?.imageURL ?? product?.squareThumbnailURL ?? product?.thumbnailURL ?? ""))
-        priceLabel.text = product?.priceText ?? ""
-        productNameLabel.text = product?.name ?? ""
-        attributeLabel.text = product?.attribute ?? ""
+    func configure(with product: ProductDataModel) {
+        productImageView.sd_setImage(with: URL(string: product.imageURL ?? product.squareThumbnailURL ?? product.thumbnailURL ?? ""))
+        priceLabel.text = product.priceText ?? ""
+        productNameLabel.text = product.name ?? ""
+        attributeLabel.text = product.attribute ?? ""
     }
 }
 

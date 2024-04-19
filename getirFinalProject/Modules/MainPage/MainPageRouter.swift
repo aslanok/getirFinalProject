@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MainPageRouting{
-    func presentDetailPage(product : ProductResponse,from view : UIViewController?)
+    func presentDetailPage(product : ProductDataModel,from view : UIViewController?)
 }
 
 
@@ -26,7 +26,7 @@ class MainPageRouter : MainPageRouting{
         return view
     }
     
-    func presentDetailPage(product : ProductResponse,from view: UIViewController?) {
+    func presentDetailPage(product : ProductDataModel,from view: UIViewController?) {
         let router = DetailPageRouter()
         view?.present(router.viewController(product: product), animated: true)
     }

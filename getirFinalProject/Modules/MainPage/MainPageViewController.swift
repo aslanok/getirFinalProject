@@ -8,18 +8,18 @@
 import UIKit
 
 protocol MainPageViewContract : UIViewController{
-    func suggestedProductsFetched(productList : [SuggestedProductsResponse])
-    func allProductsFetched(productList : [AllProductsResponse])
+    func suggestedProductsFetched(productList : [ProductDataModel])
+    func allProductsFetched(productList : [ProductDataModel])
 
 }
 
 class MainPageViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MainPageViewContract{
     
     var presenter : MainPagePresentation?
-    private var _suggestedProductList = [SuggestedProductsResponse]()
-    private var _allProductList = [AllProductsResponse]()
+    private var _suggestedProductList = [ProductDataModel]()
+    private var _allProductList = [ProductDataModel]()
     
-    private var suggestedProductList : [SuggestedProductsResponse] = [SuggestedProductsResponse]()
+    //private var suggestedProductList : [SuggestedProductsResponse] = [SuggestedProductsResponse]()
     
     private lazy var headerView : UIView = {
         let view = UIView()
@@ -37,7 +37,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         label.textColor = .Theme.white
         return label
     }()
-    
+    /*
     private lazy var basketMiniView : UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,9 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         view.backgroundColor = .Theme.white
         return view
     }()
-    
+    */
+    private lazy var basketMiniView = BasketMiniView(frame: .zero)
+    /*
     private lazy var miniBasketImageView : UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "miniBasketIcon"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +72,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         label.font = UIFont(name: "OpenSans-Bold", size: 14)
         return label
     }()
+     */
     
     private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -129,7 +132,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         basketMiniView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
         basketMiniView.widthAnchor.constraint(equalToConstant: 90).isActive = true
         basketMiniView.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        
+        /*
         basketMiniView.addSubview(miniBasketImageView)
         miniBasketImageView.widthAnchor.constraint(equalToConstant: 24).isActive = true
         miniBasketImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
@@ -145,7 +148,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         miniBasketAmountLabelView.addSubview(miniBasketAmountLabel)
         miniBasketAmountLabel.centerXAnchor.constraint(equalTo: miniBasketAmountLabelView.centerXAnchor).isActive = true
         miniBasketAmountLabel.centerYAnchor.constraint(equalTo: miniBasketAmountLabelView.centerYAnchor).isActive = true
-        
+        */
         view.addSubview(horizontalCollectionView)
         horizontalCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20).isActive = true
         horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
@@ -160,14 +163,14 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         
     }
     
-    func suggestedProductsFetched(productList: [SuggestedProductsResponse]) {
+    func suggestedProductsFetched(productList: [ProductDataModel]) {
         _suggestedProductList = productList
         DispatchQueue.main.async {
             self.horizontalCollectionView.reloadData()
         }
     }
     
-    func allProductsFetched(productList : [AllProductsResponse]){
+    func allProductsFetched(productList : [ProductDataModel]){
         _allProductList = productList
         DispatchQueue.main.async {
             self.verticalCollectionView.reloadData()
@@ -180,13 +183,13 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
             if _suggestedProductList.isEmpty {
                 return 0
             } else {
-                return _suggestedProductList[0].products.count
+                return _suggestedProductList.count
             }
         }else{
             if _allProductList.isEmpty {
                 return 0
             } else {
-                return _allProductList[0].products?.count ?? 0
+                return _allProductList.count 
             }
 
         }
@@ -198,11 +201,11 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         }
         if collectionView == horizontalCollectionView{
             if _suggestedProductList.isEmpty == false {
-                cell.configure(with: _suggestedProductList[0].products[indexPath.row])
+                cell.configure(with: _suggestedProductList[indexPath.row])
             }
         }else{
             if _allProductList.isEmpty == false {
-                cell.configure(with: _allProductList[0].products?[indexPath.row])
+                cell.configure(with: _allProductList[indexPath.row])
             }
         }
         cell.delegate = self
@@ -232,13 +235,12 @@ extension MainPageViewController : ProductCellButtonDelegate{
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
         indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
         
-        
-        var product = ProductResponse(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil)
+        var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
         
         if indexPathForHorizontal == nil{
-            product = _allProductList[0].products?[indexPathForVertical ?? 0] ?? ProductResponse(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil)
-        }else{
-            product = _suggestedProductList[0].products[indexPathForHorizontal ?? 0]
+            product = _allProductList[indexPathForVertical ?? 0]}
+        else{
+            product = _suggestedProductList[indexPathForHorizontal ?? 0]
         }
         
         presenter?.goPresentDetailPage(product: product)
