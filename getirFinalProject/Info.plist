@@ -7,7 +7,12 @@
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>cdn.getir.com</key>
-			<dict/>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>UIApplicationSceneManifest</key>
