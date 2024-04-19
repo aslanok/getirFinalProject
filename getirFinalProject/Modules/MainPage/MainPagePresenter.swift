@@ -34,7 +34,7 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
     }
     
     func setFetchAllProductDataSuccess(result: [AllProductsResponse]) {
-        print("resultGeldi : \(result[0].id)")
+        output.allProductsFetched(productList: result)
     }
     
     func setFetchAllProductDataFailed(error: String) {
@@ -42,7 +42,7 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
     }
     
     func setFetchSuggestedProductDataSuccess(result: [SuggestedProductsResponse]) {
-        
+        output.suggestedProductsFetched(productList: result)
     }
     
     func setFetchSuggestedProductDataFailed(error: String) {

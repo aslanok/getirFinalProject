@@ -8,12 +8,18 @@
 import UIKit
 
 protocol MainPageViewContract : UIViewController{
-    
+    func suggestedProductsFetched(productList : [SuggestedProductsResponse])
+    func allProductsFetched(productList : [AllProductsResponse])
+
 }
 
 class MainPageViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MainPageViewContract{
     
     var presenter : MainPagePresentation?
+    private var _suggestedProductList = [SuggestedProductsResponse]()
+    private var _allProductList = [AllProductsResponse]()
+    
+    private var suggestedProductList : [SuggestedProductsResponse] = [SuggestedProductsResponse]()
     
     private lazy var headerView : UIView = {
         let view = UIView()
@@ -68,6 +74,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         //layout.itemSize = CGSize(width: 140, height: 140) // Adjust size as needed
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -82,8 +89,8 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     private lazy var verticalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
+        //layout.minimumLineSpacing = 10
+        //layout.minimumInteritemSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
@@ -98,10 +105,12 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter?.fetchSuggestedProducts()
+        presenter?.fetchAllProducts()
         view.backgroundColor = .Theme.viewBackgroundColor
         setupUI()
-        presenter?.fetchAllProducts()
-        
+
     }
     
     func setupUI(){
@@ -141,7 +150,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         horizontalCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20).isActive = true
         horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         horizontalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
-        horizontalCollectionView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        horizontalCollectionView.heightAnchor.constraint(equalToConstant: 190).isActive = true
         
         view.addSubview(verticalCollectionView)
         verticalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 0).isActive = true
@@ -151,11 +160,35 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         
     }
     
+    func suggestedProductsFetched(productList: [SuggestedProductsResponse]) {
+        _suggestedProductList = productList
+        DispatchQueue.main.async {
+            self.horizontalCollectionView.reloadData()
+        }
+    }
+    
+    func allProductsFetched(productList : [AllProductsResponse]){
+        _allProductList = productList
+        DispatchQueue.main.async {
+            self.verticalCollectionView.reloadData()
+        }
+    }
+
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == horizontalCollectionView{
-            return 10
+            if _suggestedProductList.isEmpty {
+                return 0
+            } else {
+                return _suggestedProductList[0].products.count
+            }
         }else{
-            return 40
+            if _allProductList.isEmpty {
+                return 0
+            } else {
+                return _allProductList[0].products?.count ?? 0
+            }
+
         }
     }
     
@@ -163,7 +196,15 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCell", for: indexPath) as? ProductCell else {
             fatalError("Unable to dequeue ProductCell")
         }
-                // Configure the cell
+        if collectionView == horizontalCollectionView{
+            if _suggestedProductList.isEmpty == false {
+                cell.configure(with: _suggestedProductList[0].products[indexPath.row])
+            }
+        }else{
+            if _allProductList.isEmpty == false {
+                cell.configure(with: _allProductList[0].products?[indexPath.row])
+            }
+        }
         //cell.backgroundColor = .lightGray // Example configuration
         return cell
     }
@@ -171,10 +212,15 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
 }
 
 extension MainPageViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding: CGFloat = 10  // Assuming 10 points of padding
-        let collectionViewSize = collectionView.frame.size.width - padding * 4 // Subtracts the padding and inter-item spacing
-        return CGSize(width: collectionViewSize / 3, height: collectionViewSize / 3) // Creates a square cell
+        if collectionView == horizontalCollectionView{
+            let cellWidth: CGFloat = 110
+            let cellHeight: CGFloat = 150
+            return CGSize(width: cellWidth, height: cellHeight)
+        } else {
+            let padding: CGFloat = 10
+            let collectionViewSize = collectionView.frame.size.width - padding * 4
+            return CGSize(width: collectionViewSize / 3, height: 150)
+        }
     }
 }

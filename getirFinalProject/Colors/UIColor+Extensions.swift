@@ -22,6 +22,12 @@ extension UIColor{
         static var lightPurple : UIColor {
             return UIColor(red: 242/255, green: 240/255, blue: 250/255, alpha: 1)
         }
+        static var darkText : UIColor {
+            return UIColor(red: 25/255, green: 25/255, blue: 25/255, alpha: 1)
+        }
+        static var grayText : UIColor {
+            return UIColor(red: 105/255, green: 116/255, blue: 136/255, alpha: 1)
+        }
     }
 
     

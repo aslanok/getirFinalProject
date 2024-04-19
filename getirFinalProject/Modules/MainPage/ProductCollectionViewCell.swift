@@ -15,8 +15,10 @@ class ProductCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 8  // Optional: rounded corners
-        imageView.sd_setImage(with: URL(string: "https://market-product-images-cdn.getirapi.com/product/62a59d8a-4dc4-4b4d-8435-643b1167f636.jpg"))
+        imageView.layer.cornerRadius = 8
+        imageView.sd_setImage(with: URL(string: "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png"))
+        imageView.layer.borderColor = UIColor.Theme.lightPurple.cgColor
+        imageView.layer.borderWidth = 1
         return imageView
     }()
     
@@ -24,10 +26,11 @@ class ProductCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .darkText
-        label.textAlignment = .center
-        label.text = "Pr Name"
-        label.numberOfLines = 2  // Allows for wrapping if needed
+        label.textColor = .Theme.darkText
+        label.textAlignment = .left
+        label.text = "Kızılay Erzincan & Misket Limonu ve Nane Aromalı İçecek İkilisi"
+        label.font = UIFont(name: "OpenSans-SemiBold", size: 12)
+        label.numberOfLines = 1
         return label
     }()
     
@@ -35,7 +38,9 @@ class ProductCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.text = "Price"
+        label.text = "₺0,00"
+        label.textAlignment = .left
+        label.font = UIFont(name: "OpenSans-Bold", size: 14)
         label.textColor = .Theme.primaryColor  // Makes the price stand out
         return label
     }()
@@ -44,9 +49,17 @@ class ProductCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .systemGreen  // Makes the price stand out
+        label.textColor = .Theme.darkText  // Makes the price stand out
+        label.textAlignment = .left
         label.text = "Attribute"
         return label
+    }()
+    
+    private lazy var plusButton : UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "plusIcon"), for: .normal)
+        return button
     }()
     
     // Initialize the cell
@@ -61,7 +74,7 @@ class ProductCell: UICollectionViewCell {
     
     // Setup views
     private func setupViews() {
-        self.backgroundColor = .black
+        self.backgroundColor = .clear
         //layer.shadowOffset = CGSize(width: 0, height: 2)
         //layer.shadowColor = UIColor.black.cgColor
         
@@ -70,13 +83,24 @@ class ProductCell: UICollectionViewCell {
         addSubview(productNameLabel)
         addSubview(priceLabel)
         addSubview(attributeLabel)
+        addSubview(plusButton)
         
         NSLayoutConstraint.activate([
-            productImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
+            productImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             productImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             productImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            productImageView.heightAnchor.constraint(equalTo: productImageView.widthAnchor)  // Keep the aspect ratio 1:1
+            productImageView.heightAnchor.constraint(equalToConstant: 90),
+            productImageView.widthAnchor.constraint(equalToConstant: 90)
         ])
+        
+        NSLayoutConstraint.activate([
+            plusButton.topAnchor.constraint(equalTo: productImageView.topAnchor, constant: -10),
+            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
+            plusButton.heightAnchor.constraint(equalToConstant: 32),
+            plusButton.widthAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        
         
         NSLayoutConstraint.activate([
             priceLabel.topAnchor.constraint(equalTo: productImageView.bottomAnchor, constant: 8),
@@ -95,15 +119,14 @@ class ProductCell: UICollectionViewCell {
             attributeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             attributeLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
         ])
-        
-        
     }
     
     // Configure cell with data
-    func configure(with product: ProductResponse) {
-        //productImageView.image = UIImage(named: product.imageURL)
-        //titleLabel.text = product.title
-        //priceLabel.text = "\(product.price)"
+    func configure(with product: ProductResponse?) {
+        productImageView.sd_setImage(with: URL(string: product?.imageURL ?? product?.squareThumbnailURL ?? product?.thumbnailURL ?? ""))
+        priceLabel.text = product?.priceText ?? ""
+        productNameLabel.text = product?.name ?? ""
+        attributeLabel.text = product?.attribute ?? ""
     }
 }
 
