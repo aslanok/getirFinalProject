@@ -109,7 +109,7 @@ class CountableBasketView : UIView{
     func updateUI(){
         delegate?.productCountDidUpdate(productCount)
         countLabel.text = "\(productCount)"
-        if productCount > 0{
+        if productCount > 1{
             decrementButton.setImage(UIImage(named: "minusSign"), for: .normal)
         } else{
             decrementButton.setImage(UIImage(named: "garbageIcon"), for: .normal)

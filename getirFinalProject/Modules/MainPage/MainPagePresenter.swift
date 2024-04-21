@@ -11,6 +11,7 @@ protocol MainPagePresentation{
     func fetchAllProducts()
     func fetchSuggestedProducts()
     func goPresentDetailPage(product : ProductDataModel)
+    func goShopingCartScreen()
 }
 
 
@@ -57,6 +58,10 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
         }
         
         output.suggestedProductsFetched(productList: modelledList)
+    }
+    
+    func goShopingCartScreen() {
+        router.presentShoppingCart(from: output)
     }
     
     func setFetchSuggestedProductDataFailed(error: String) {

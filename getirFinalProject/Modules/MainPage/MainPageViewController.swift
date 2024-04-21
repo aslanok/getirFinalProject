@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 protocol MainPageViewContract : UIViewController{
     func suggestedProductsFetched(productList : [ProductDataModel])
@@ -108,12 +109,19 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .Theme.viewBackgroundColor
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(basketMiniViewTapped))
+        basketMiniView.addGestureRecognizer(tapGesture)
+        basketMiniView.isUserInteractionEnabled = true
         
         presenter?.fetchSuggestedProducts()
         presenter?.fetchAllProducts()
-        view.backgroundColor = .Theme.viewBackgroundColor
         setupUI()
-
+    }
+    
+    @objc private func basketMiniViewTapped(){
+        presenter?.goShopingCartScreen()
+        //print("tapped")
     }
     
     func setupUI(){
@@ -245,4 +253,59 @@ extension MainPageViewController : ProductCellButtonDelegate{
         
         presenter?.goPresentDetailPage(product: product)
     }
+    
+    func addProduct(name: String, price: Double) {
+        let newProduct = NSEntityDescription.insertNewObject(forEntityName: "Product", into: CoreDataStack.shared.context) as! Product
+        newProduct.name = name
+        newProduct.price = price
+        newProduct.imageURL = "sdklfjdfks"
+        newProduct.count = 0
+        newProduct.productAttr = "asofs"
+        //newProduct.quantity = 1
+
+        do {
+            try CoreDataStack.shared.context.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func fetchProducts() -> [Product] {
+        let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
+
+        do {
+            return try CoreDataStack.shared.context.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return []
+        }
+    }
+    
+    func calculateTotalPrice() -> Double {
+        let products = fetchProducts()
+        for i in products{
+            print("productPrice : \(i.price)")
+        }
+        return products.reduce(0) { total, product in
+            total + product.price
+        }
+
+    }
+    
+    func deleteAllProducts() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Product")
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try CoreDataStack.shared.context.execute(batchDeleteRequest)
+            try CoreDataStack.shared.context.save()
+        } catch let error as NSError {
+            print("Could not delete. \(error), \(error.userInfo)")
+        }
+    }
+
+
+
+
+    
 }

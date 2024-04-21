@@ -9,6 +9,7 @@ import UIKit
 
 protocol MainPageRouting{
     func presentDetailPage(product : ProductDataModel,from view : UIViewController?)
+    func presentShoppingCart(from view : UIViewController)
 }
 
 
@@ -29,6 +30,11 @@ class MainPageRouter : MainPageRouting{
     func presentDetailPage(product : ProductDataModel,from view: UIViewController?) {
         let router = DetailPageRouter()
         view?.present(router.viewController(product: product), animated: true)
+    }
+    
+    func presentShoppingCart(from view: UIViewController) {
+        let router = ShoppingCartRouter()
+        view.present(router.viewController(), animated: true)
     }
     
 
