@@ -250,21 +250,23 @@ extension MainPageViewController : ProductCellButtonDelegate{
         else{
             product = _suggestedProductList[indexPathForHorizontal ?? 0]
         }
+        addProduct(product: product)
+        //presenter?.goPresentDetailPage(product: product)
         
-        presenter?.goPresentDetailPage(product: product)
     }
     
-    func addProduct(name: String, price: Double) {
+    func addProduct(product : ProductDataModel) {
         let newProduct = NSEntityDescription.insertNewObject(forEntityName: "Product", into: CoreDataStack.shared.context) as! Product
-        newProduct.name = name
-        newProduct.price = price
-        newProduct.imageURL = "sdklfjdfks"
-        newProduct.count = 0
-        newProduct.productAttr = "asofs"
-        //newProduct.quantity = 1
+        newProduct.name = product.name
+        newProduct.price = product.price ?? 0
+        newProduct.priceText = product.priceText
+        newProduct.imageURL = product.imageURL ?? product.squareThumbnailURL ?? product.thumbnailURL ?? ""
+        newProduct.count = Int16(product.getProductCount())
+        newProduct.productAttr = product.attribute ?? ""
 
         do {
             try CoreDataStack.shared.context.save()
+            print("başarıyla eklendi")
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
@@ -289,7 +291,6 @@ extension MainPageViewController : ProductCellButtonDelegate{
         return products.reduce(0) { total, product in
             total + product.price
         }
-
     }
     
     func deleteAllProducts() {

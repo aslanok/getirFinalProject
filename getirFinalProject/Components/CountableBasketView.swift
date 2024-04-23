@@ -15,13 +15,13 @@ class CountableBasketView : UIView{
     
     weak var delegate: CountableBasketViewDelegate?
     
-    private var productCount: Int = 0 {
+    private var productCount: Int = 1 {
         didSet {
             updateUI()
         }
     }
 
-    init(frame: CGRect, initialCount: Int = 0) {
+    init(frame: CGRect, initialCount: Int = 1) {
         super.init(frame: frame)
         self.productCount = initialCount
         setupView()
@@ -114,6 +114,10 @@ class CountableBasketView : UIView{
         } else{
             decrementButton.setImage(UIImage(named: "garbageIcon"), for: .normal)
         }
+    }
+    
+    func setInitialCount(count : Int){
+        productCount = count
     }
     
     

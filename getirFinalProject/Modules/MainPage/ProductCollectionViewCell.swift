@@ -42,7 +42,6 @@ class ProductCell: UICollectionViewCell {
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.text = "₺0,00"
         label.textAlignment = .left
         label.font = UIFont(name: "OpenSans-SemiBold", size: 14)

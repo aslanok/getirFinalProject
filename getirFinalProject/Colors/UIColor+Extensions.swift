@@ -31,6 +31,9 @@ extension UIColor{
         static var shadowGray : UIColor {
             return UIColor(red: 244/255, green: 244/255, blue: 244/255, alpha: 1)
         }
+        static var seperatorGray : UIColor {
+            return UIColor(red: 242/255, green: 240/255, blue: 250/255, alpha: 1)
+        }
     }
 
     

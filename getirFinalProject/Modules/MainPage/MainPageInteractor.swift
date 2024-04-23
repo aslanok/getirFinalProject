@@ -41,6 +41,7 @@ class MainPageInteractor : MainPageInteractorInput{
         APIService.shared.request( endpointSuggestedProductsURL, type: [SuggestedProductsResponse].self) { result in
             switch result{
             case .success(let data):
+                
                 self.output?.setFetchSuggestedProductDataSuccess(result: data)
             case .failure(let error):
                 self.output?.setFetchSuggestedProductDataFailed(error: error.errorDescription)

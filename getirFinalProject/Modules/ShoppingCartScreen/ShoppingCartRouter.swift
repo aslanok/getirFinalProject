@@ -15,8 +15,11 @@ class ShoppingCartRouter : ShoppingCartRouting{
     
     func viewController() -> UIViewController {
         let view = ShoppingCartViewController()
-        let presenter = ShoppingCartPresenter(output: view, router: self)
+        let interactor = ShoppingCartInteractor()
+        let presenter = ShoppingCartPresenter(output: view, router: self, interactor: interactor)
+        
         view.modalPresentationStyle = .fullScreen
+        interactor.output = presenter
         view.presenter = presenter
         presenter.output = view
         return view
