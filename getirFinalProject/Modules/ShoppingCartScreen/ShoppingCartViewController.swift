@@ -89,7 +89,43 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         collectionView.register(ProductCell.self, forCellWithReuseIdentifier: "ProductCell")
         return collectionView
     }()
-
+    
+    private lazy var bottomView : UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .Theme.white
+        return view
+    }()
+    
+    private lazy var priceLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "₺0,00"
+        label.textAlignment = .center
+        label.font = UIFont(name: "OpenSans-Bold", size: 20)
+        label.textColor = .Theme.primaryColor  // Makes the price stand out
+        label.layer.cornerRadius = 10
+        label.layer.borderWidth = 1
+        label.layer.borderColor = UIColor.Theme.shadowGray.cgColor
+        return label
+    }()
+    
+    
+    private lazy var completeOrderButton : CustomRoundedButton = {
+        let button = CustomRoundedButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Siparişi Tamamla", for: .normal)
+        button.backgroundColor = UIColor.Theme.primaryColor
+        button.setTitleColor(.Theme.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: "OpenSans-Bold", size: 14)
+        button.addTarget(self, action: #selector(completeOrderTapped), for: .touchUpInside)
+        button.setRoundedCorners(corners: [.topLeft,.bottomLeft], radius: 10)
+        return button
+    }()
+    
+    @objc func completeOrderTapped(){
+        print("tapped")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -146,6 +182,26 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         horizontalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         horizontalCollectionView.heightAnchor.constraint(equalToConstant: 185).isActive = true
         
+        view.addSubview(bottomView)
+        bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        bottomView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        bottomView.addSubview(completeOrderButton)
+        completeOrderButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 12).isActive = true
+        completeOrderButton.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 12).isActive = true
+        completeOrderButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        completeOrderButton.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        
+        bottomView.addSubview(priceLabel)
+        priceLabel.topAnchor.constraint(equalTo: completeOrderButton.topAnchor).isActive = true
+        priceLabel.leadingAnchor.constraint(equalTo: completeOrderButton.trailingAnchor).isActive = true
+        priceLabel.bottomAnchor.constraint(equalTo: completeOrderButton.bottomAnchor).isActive = true
+        priceLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -10).isActive = true
+        //completeOrderButton.setRoundedCorners(corners: [.topLeft,.bottomLeft], radius: 10)
+        
+        //button.setRoundedCorners(corners: [.topLeft,.bottomLeft], radius: 10)
         
         //suggestedProductsLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
         

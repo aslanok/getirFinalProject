@@ -23,6 +23,7 @@ class CustomRoundedView: UIView {
             setNeedsLayout() // Redraw when corners change
         }
     }
+    
     var cornerRadius: CGFloat = 0 {
         didSet {
             setNeedsLayout() // Redraw when radius changes
