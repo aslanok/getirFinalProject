@@ -46,5 +46,9 @@ class ProductDataModel {
         productCount -= 1
     }
     
+    func setProductCount(count : Int){
+        productCount = count
+    }
+    
     
 }

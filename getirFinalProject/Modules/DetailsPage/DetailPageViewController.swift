@@ -123,15 +123,21 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
     }()
     
     @objc func addToBasketButtonTapped(){
-        productCountDidUpdate(product.getProductCount() + 1)
+        productBasketView.setInitialCount(count: 1)
     }
     
-    private lazy var productBasketView = CountableBasketView(frame: .zero, initialCount: product.getProductCount())
+    private lazy var productBasketView = CountableBasketView(frame: .zero, initialCount: product.getProductCount() )
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .Theme.viewBackgroundColor
         setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
+
     }
     
     func setupUI(){
@@ -147,7 +153,7 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
         
         if product.getProductCount() > 0{
             basketMiniView.isHidden = false
-            productBasketView.isHidden = true
+            productBasketView.isHidden = false
             addToBasketButton.isHidden = true
             addToBasketButton.isUserInteractionEnabled = false
         }else{
@@ -217,10 +223,6 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
         addToBasketButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         addToBasketButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         addToBasketButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5).isActive = true
-        
-        
-        
-        
     }
     
     @objc func exitButtonTapped(){
@@ -231,6 +233,8 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
 
 extension DetailPageViewController : CountableBasketViewDelegate {
     func productCountDidUpdate(_ count: Int) {
+        CoreDataStack.shared.addProduct(product: product, count: count)
+        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
         if count > 0 {
             basketMiniView.isHidden = false
             productBasketView.isHidden = false

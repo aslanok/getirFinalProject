@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		BE0BFCA72BD8152000FC2285 /* CustomRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0BFCA62BD8152000FC2285 /* CustomRoundedButton.swift */; };
+		BE0BFCA92BD81B8200FC2285 /* LayoutOrientationEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0BFCA82BD81B8200FC2285 /* LayoutOrientationEnums.swift */; };
+		BE0BFCAB2BD8557900FC2285 /* NumberFormatterUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0BFCAA2BD8557900FC2285 /* NumberFormatterUtility.swift */; };
 		BE2218552BD1E0E200977CE2 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2218542BD1E0E200977CE2 /* APIService.swift */; };
 		BE2218582BD1E22500977CE2 /* SuggestedProductResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2218572BD1E22500977CE2 /* SuggestedProductResponse.swift */; };
 		BE22185A2BD1E23500977CE2 /* ProductResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2218592BD1E23500977CE2 /* ProductResponse.swift */; };
@@ -45,6 +47,8 @@
 
 /* Begin PBXFileReference section */
 		BE0BFCA62BD8152000FC2285 /* CustomRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRoundedButton.swift; sourceTree = "<group>"; };
+		BE0BFCA82BD81B8200FC2285 /* LayoutOrientationEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutOrientationEnums.swift; sourceTree = "<group>"; };
+		BE0BFCAA2BD8557900FC2285 /* NumberFormatterUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatterUtility.swift; sourceTree = "<group>"; };
 		BE2218542BD1E0E200977CE2 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		BE2218572BD1E22500977CE2 /* SuggestedProductResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedProductResponse.swift; sourceTree = "<group>"; };
 		BE2218592BD1E23500977CE2 /* ProductResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductResponse.swift; sourceTree = "<group>"; };
@@ -116,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				BE22185E2BD1E51B00977CE2 /* NetworkingEnums.swift */,
+				BE0BFCA82BD81B8200FC2285 /* LayoutOrientationEnums.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -241,6 +246,7 @@
 				BEC2D2EF2BD3130B007A982C /* CountableBasketView.swift */,
 				BEC2D2F12BD329E1007A982C /* BasketMiniView.swift */,
 				BE0BFCA62BD8152000FC2285 /* CustomRoundedButton.swift */,
+				BE0BFCAA2BD8557900FC2285 /* NumberFormatterUtility.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -325,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE3C28412BD5569C00876A66 /* ShoppingCartViewController.swift in Sources */,
+				BE0BFCAB2BD8557900FC2285 /* NumberFormatterUtility.swift in Sources */,
 				BED4BBBD2BCF1F1A008FA153 /* MainPagePresenter.swift in Sources */,
 				BE3C283E2BD54E8E00876A66 /* CoreDataStack.swift in Sources */,
 				BE22185A2BD1E23500977CE2 /* ProductResponse.swift in Sources */,
@@ -350,6 +357,7 @@
 				BE3C28452BD556B100876A66 /* ShoppingCartRouter.swift in Sources */,
 				BE22185C2BD1E4B300977CE2 /* AllProductsResponse.swift in Sources */,
 				BED4BBA42BCF1936008FA153 /* SceneDelegate.swift in Sources */,
+				BE0BFCA92BD81B8200FC2285 /* LayoutOrientationEnums.swift in Sources */,
 				BE2218552BD1E0E200977CE2 /* APIService.swift in Sources */,
 				BED4BBCA2BCF2DC0008FA153 /* CustomRoundedView.swift in Sources */,
 			);

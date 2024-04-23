@@ -69,5 +69,8 @@ class BasketMiniView: UIView {
         ])
     }
     
+    func setTotalPrice(price : Double){
+        self.miniBasketAmountLabel.text = "₺\(NumberFormatterUtility.formatNumber(price))"
+    }
     
 }

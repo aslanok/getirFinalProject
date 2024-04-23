@@ -16,9 +16,12 @@ protocol MainPageViewContract : UIViewController{
 
 class MainPageViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MainPageViewContract{
     
+    private var _count : Int = 0
     var presenter : MainPagePresentation?
     private var _suggestedProductList = [ProductDataModel]()
     private var _allProductList = [ProductDataModel]()
+    
+    private var _currentProduct : ProductDataModel = ProductDataModel(id: "", imageURL: "", price: 0, name: "", priceText: "", shortDescription: "", category: "", unitPrice: 0, squareThumbnailURL: "", status: 0, attribute: "", thumbnailURL: "", productCount: 0)
     
     //private var suggestedProductList : [SuggestedProductsResponse] = [SuggestedProductsResponse]()
     
@@ -104,11 +107,11 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         collectionView.register(ProductCell.self, forCellWithReuseIdentifier: "ProductCell")
         return collectionView
     }()
-
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        CoreDataStack.shared.deleteAllProducts()
+        
         view.backgroundColor = .Theme.viewBackgroundColor
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(basketMiniViewTapped))
         basketMiniView.addGestureRecognizer(tapGesture)
@@ -117,11 +120,16 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         presenter?.fetchSuggestedProducts()
         presenter?.fetchAllProducts()
         setupUI()
+        basketMiniView.setTotalPrice(price: (CoreDataStack.shared.calculateTotalPrice()))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
     }
     
     @objc private func basketMiniViewTapped(){
         presenter?.goShopingCartScreen()
-        //print("tapped")
     }
     
     func setupUI(){
@@ -140,23 +148,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         basketMiniView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
         basketMiniView.widthAnchor.constraint(equalToConstant: 90).isActive = true
         basketMiniView.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        /*
-        basketMiniView.addSubview(miniBasketImageView)
-        miniBasketImageView.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        miniBasketImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        miniBasketImageView.leadingAnchor.constraint(equalTo: basketMiniView.leadingAnchor, constant: 5).isActive = true
-        miniBasketImageView.centerYAnchor.constraint(equalTo: basketMiniView.centerYAnchor).isActive = true
         
-        basketMiniView.addSubview(miniBasketAmountLabelView)
-        miniBasketAmountLabelView.trailingAnchor.constraint(equalTo: basketMiniView.trailingAnchor, constant: -1).isActive = true
-        miniBasketAmountLabelView.topAnchor.constraint(equalTo: basketMiniView.topAnchor, constant: 1).isActive = true
-        miniBasketAmountLabelView.bottomAnchor.constraint(equalTo: basketMiniView.bottomAnchor, constant: -1).isActive = true
-        miniBasketAmountLabelView.leadingAnchor.constraint(equalTo: miniBasketImageView.trailingAnchor, constant: 5).isActive = true
-        
-        miniBasketAmountLabelView.addSubview(miniBasketAmountLabel)
-        miniBasketAmountLabel.centerXAnchor.constraint(equalTo: miniBasketAmountLabelView.centerXAnchor).isActive = true
-        miniBasketAmountLabel.centerYAnchor.constraint(equalTo: miniBasketAmountLabelView.centerYAnchor).isActive = true
-        */
         view.addSubview(horizontalCollectionView)
         horizontalCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20).isActive = true
         horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
@@ -220,6 +212,36 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("didSelect indexPath : \(indexPath.row)")
+        if collectionView == horizontalCollectionView{
+            let product = _suggestedProductList[indexPath.row]
+            _currentProduct = product
+            _currentProduct.setProductCount(count: CoreDataStack.shared.fetchProductCount(byID: _currentProduct.id) ?? 0)
+            presenter?.goPresentDetailPage(product: _currentProduct)
+        }else{
+            let product = _allProductList[indexPath.row]
+            _currentProduct = product
+            _currentProduct.setProductCount(count: CoreDataStack.shared.fetchProductCount(byID: _currentProduct.id) ?? 0)
+            presenter?.goPresentDetailPage(product: _currentProduct)
+        }
+        
+        /*
+        var indexPathForHorizontal : Int?
+        var indexPathForVertical : Int?
+        indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
+        indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
+        
+        var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
+        
+        if indexPathForHorizontal == nil{
+            product = _allProductList[indexPathForVertical ?? 0]}
+        else{
+            product = _suggestedProductList[indexPathForHorizontal ?? 0]
+        }
+         */
+        //presenter?.goPresentDetailPage(product: product)
+    }
 }
 
 extension MainPageViewController: UICollectionViewDelegateFlowLayout {
@@ -243,32 +265,74 @@ extension MainPageViewController : ProductCellButtonDelegate{
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
         indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
         
-        var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
-        
         if indexPathForHorizontal == nil{
-            product = _allProductList[indexPathForVertical ?? 0]}
+            _currentProduct = _allProductList[indexPathForVertical ?? 0]}
         else{
-            product = _suggestedProductList[indexPathForHorizontal ?? 0]
+            _currentProduct = _suggestedProductList[indexPathForHorizontal ?? 0]
         }
-        addProduct(product: product)
+        //print("product : \(_currentProduct.name)")
+        //addProduct(product: product)
         //presenter?.goPresentDetailPage(product: product)
-        
     }
-    
-    func addProduct(product : ProductDataModel) {
-        let newProduct = NSEntityDescription.insertNewObject(forEntityName: "Product", into: CoreDataStack.shared.context) as! Product
-        newProduct.name = product.name
-        newProduct.price = product.price ?? 0
-        newProduct.priceText = product.priceText
-        newProduct.imageURL = product.imageURL ?? product.squareThumbnailURL ?? product.thumbnailURL ?? ""
-        newProduct.count = Int16(product.getProductCount())
-        newProduct.productAttr = product.attribute ?? ""
+    func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int) {
+        _count = newCount
+        CoreDataStack.shared.addProduct(product: _currentProduct, count: _count)
+        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
+        //print("currentItem : \(_currentProduct.name),newCount : \(newCount)")
+    }
+    /*
+        
+    func fetchProductCount(byID productID: String) -> Int? {
+        let context = CoreDataStack.shared.context
+        let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", productID)
+        fetchRequest.fetchLimit = 1  // We're only interested in one product with this ID
 
         do {
-            try CoreDataStack.shared.context.save()
-            print("başarıyla eklendi")
+            let results = try context.fetch(fetchRequest)
+            if let product = results.first {
+                return Int(product.count)  // Assuming 'count' is stored as Int16 in Core Data
+            } else {
+                print("No product found with ID \(productID)")
+                return nil  // No product found
+            }
+        } catch {
+            print("Failed to fetch product: \(error)")
+            return nil  // An error occurred
+        }
+    }
+    
+    func addProduct(product: ProductDataModel, count: Int) {
+        let context = CoreDataStack.shared.context
+        let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", product.id)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let existingProduct = results.first {
+                // Product exists, update its count
+                if count == 0{
+                    context.delete(existingProduct)
+                }else{
+                    existingProduct.count = Int16(count)
+                }
+            } else {
+                let newProduct = NSEntityDescription.insertNewObject(forEntityName: "Product", into: context) as! Product
+                newProduct.id = product.id
+                newProduct.name = product.name
+                newProduct.price = product.price ?? 0
+                newProduct.priceText = product.priceText
+                newProduct.imageURL = product.imageURL ?? product.squareThumbnailURL ?? product.thumbnailURL ?? ""
+                newProduct.count = Int16(count)
+                newProduct.productAttr = product.attribute ?? ""
+                print("New product added with count \(count).")
+            }
+            // Save the context after making changes
+            try context.save()
+            //basketMiniView.setTotalPrice(price: calculateTotalPrice())
+            print("Changes successfully saved to Core Data.")
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            print("Could not fetch or save. \(error), \(error.userInfo)")
         }
     }
     
@@ -304,9 +368,6 @@ extension MainPageViewController : ProductCellButtonDelegate{
             print("Could not delete. \(error), \(error.userInfo)")
         }
     }
-
-
-
-
+     */
     
 }

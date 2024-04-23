@@ -138,6 +138,11 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         _shoppingList = fetchProducts().map({ product in
             ProductDataModel(id: product.id ?? "-1", imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: "", category: "", unitPrice: 0.0, squareThumbnailURL: "", status: 0, attribute: product.productAttr, thumbnailURL: "", productCount: Int(product.count))
         })
+        updateBasketPrice()
+    }
+    
+    func updateBasketPrice(){
+        priceLabel.text = "₺\(CoreDataStack.shared.calculateTotalPrice())"
     }
     
     func setupUI(){
@@ -247,11 +252,14 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         return cell
     }
     
+    
+    
     func didTapPlusButton(in cell: UICollectionViewCell) {
+        /*
         var indexPathForHorizontal : Int?
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
         var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
-        
+        */
         
     }
     
@@ -273,6 +281,10 @@ extension ShoppingCartViewController : UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+    
+    func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int) {
+        
     }
     
     

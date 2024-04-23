@@ -10,9 +10,10 @@ import SDWebImage
 
 protocol ProductCellButtonDelegate : AnyObject{
     func didTapPlusButton(in cell: UICollectionViewCell)
+    func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int)
 }
 
-class ProductCell: UICollectionViewCell {
+class ProductCell: UICollectionViewCell, CountableBasketViewDelegate {
 
     weak var delegate : ProductCellButtonDelegate?
     
@@ -67,6 +68,8 @@ class ProductCell: UICollectionViewCell {
         return button
     }()
     
+    private lazy var countableBasketView = CountableBasketView(frame: .zero, initialCount: 1 ,orientation: .vertical)
+    
     // Initialize the cell
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,6 +82,7 @@ class ProductCell: UICollectionViewCell {
     
     // Setup views
     private func setupViews() {
+        countableBasketView.delegate = self
         self.backgroundColor = .clear
         //layer.shadowOffset = CGSize(width: 0, height: 2)
         //layer.shadowColor = UIColor.black.cgColor
@@ -100,7 +104,7 @@ class ProductCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
             plusButton.topAnchor.constraint(equalTo: productImageView.topAnchor, constant: -10),
-            plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 8),
+            plusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             plusButton.heightAnchor.constraint(equalToConstant: 32),
             plusButton.widthAnchor.constraint(equalToConstant: 32)
         ])
@@ -126,9 +130,37 @@ class ProductCell: UICollectionViewCell {
         ])
     }
     
+    func addVerticalBasketView(){
+        plusButton.isHidden = true
+        countableBasketView.setInitialCount(count: 1)
+        self.bringSubviewToFront(countableBasketView)
+        self.addSubview(countableBasketView)
+        countableBasketView.topAnchor.constraint(equalTo: plusButton.topAnchor, constant: 0).isActive = true
+        countableBasketView.trailingAnchor.constraint(equalTo: plusButton.trailingAnchor).isActive = true
+        countableBasketView.heightAnchor.constraint(equalToConstant: 96).isActive = true
+        countableBasketView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+    }
+    
+    func removeVerticalBasketView(){
+        countableBasketView.removeFromSuperview()
+        plusButton.isHidden = false
+        productImageView.layer.borderColor = UIColor.Theme.lightPurple.cgColor
+        
+    }
+    
     @objc func plusButtonTapped(){
         delegate?.didTapPlusButton(in: self)
+        productImageView.layer.borderColor = UIColor.Theme.primaryColor.cgColor
+        addVerticalBasketView()
         print("plus Tapped")
+    }
+    
+    func productCountDidUpdate(_ count: Int) {
+        //print("currentCount : \(count)")
+        delegate?.productCountDidUpdate(in: self, newCount: count)
+        if count < 1{
+            removeVerticalBasketView()
+        }
     }
     
     // Configure cell with data

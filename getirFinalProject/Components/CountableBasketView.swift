@@ -20,8 +20,11 @@ class CountableBasketView : UIView{
             updateUI()
         }
     }
+    private var layoutOrientation: LayoutOrientation
 
-    init(frame: CGRect, initialCount: Int = 1) {
+
+    init(frame: CGRect, initialCount: Int = 1, orientation: LayoutOrientation = .horizontal) {
+        self.layoutOrientation = orientation
         super.init(frame: frame)
         self.productCount = initialCount
         setupView()
@@ -29,6 +32,7 @@ class CountableBasketView : UIView{
     }
         
     required init?(coder: NSCoder) {
+        self.layoutOrientation = .horizontal // Default to horizontal
         super.init(coder: coder)
     }
 
@@ -42,18 +46,7 @@ class CountableBasketView : UIView{
         button.addTarget(self, action: #selector(decrementCount), for: .touchUpInside)
         return button
     }()
-    /*
-    private lazy var incrementButtonContainer: CustomRoundedView = {
-        let container = CustomRoundedView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.roundedCorners = [.topRight , .bottomRight]
-        container.layer.cornerRadius = 6
-        container.layer.borderWidth = 1
-        container.backgroundColor = .clear
-        container.layer.borderColor = UIColor.lightGray.cgColor
-        return container
-    }()
-    */
+
     private lazy var incrementButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -71,16 +64,12 @@ class CountableBasketView : UIView{
         label.textAlignment = .center
         label.backgroundColor = .Theme.primaryColor
         label.textColor = .Theme.white
-        label.font = UIFont(name: "OpenSans-Bold", size: 16)
+        label.font = UIFont(name: "OpenSans-Bold", size: layoutOrientation == .horizontal ? 16 : 12)
         label.text = "\(productCount)"
         return label
     }()
     
-    func setupView(){
-        self.addSubview(decrementButton)
-        self.addSubview(countLabel)
-        self.addSubview(incrementButton)
-        
+    func setupHorizontalLayout(){
         decrementButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         decrementButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         decrementButton.widthAnchor.constraint(equalToConstant: 48).isActive = true
@@ -96,6 +85,44 @@ class CountableBasketView : UIView{
         countLabel.leadingAnchor.constraint(equalTo: decrementButton.trailingAnchor, constant: -3).isActive = true
         countLabel.trailingAnchor.constraint(equalTo: incrementButton.leadingAnchor, constant: 3).isActive = true
         countLabel.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+    }
+    
+    func setupVerticalLayout(){
+        incrementButton.topAnchor.constraint(equalTo: self.topAnchor,constant: 3).isActive = true
+        incrementButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        incrementButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        incrementButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        decrementButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        //decrementButton.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        //decrementButton.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        decrementButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        decrementButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        decrementButton.bottomAnchor.constraint(equalTo: self.bottomAnchor,constant: -3).isActive = true
+        
+        self.bringSubviewToFront(countLabel)
+        countLabel.topAnchor.constraint(equalTo: incrementButton.bottomAnchor, constant: -3).isActive = true
+        countLabel.bottomAnchor.constraint(equalTo: decrementButton.topAnchor, constant: 3).isActive = true
+        countLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        
+        
+        
+    }
+    
+    func setupView(){
+        self.backgroundColor = .white
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(decrementButton)
+        self.addSubview(countLabel)
+        self.addSubview(incrementButton)
+        
+        switch layoutOrientation {
+        case .horizontal:
+            setupHorizontalLayout()
+        case .vertical:
+            setupVerticalLayout()
+        }
+
     }
     
     @objc private func decrementCount() {
@@ -120,6 +147,8 @@ class CountableBasketView : UIView{
         productCount = count
     }
     
-    
+    func getProductCount() -> Int{
+        return productCount
+    }
     
 }
