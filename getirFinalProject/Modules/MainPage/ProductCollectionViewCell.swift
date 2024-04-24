@@ -31,7 +31,6 @@ class ProductCell: UICollectionViewCell, CountableBasketViewDelegate {
     private lazy var productNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         label.textColor = .Theme.darkText
         label.textAlignment = .left
         label.text = "Kızılay Erzincan & Misket Limonu ve Nane Aromalı İçecek İkilisi"

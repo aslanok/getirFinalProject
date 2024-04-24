@@ -9,6 +9,7 @@ import Foundation
 
 protocol DetailPagePresentation{
     func back()
+    func goShopingCartScreen()
 }
 
 class DetailPagePresenter : DetailPagePresentation{
@@ -19,6 +20,10 @@ class DetailPagePresenter : DetailPagePresentation{
     init(output: DetailPageViewContract!, router: DetailPageRouting) {
         self.output = output
         self.router = router
+    }
+    
+    func goShopingCartScreen() {
+        router.presentShoppingCart(from: output)
     }
     
     func back() {

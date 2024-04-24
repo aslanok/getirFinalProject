@@ -12,12 +12,13 @@ protocol ShoppingCartViewContract : UIViewController {
     func suggestedProductsFetched(productList : [ProductDataModel])
 }
 
-class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UICollectionViewDelegate, UICollectionViewDataSource, ProductCellButtonDelegate {
+class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UICollectionViewDelegate, UICollectionViewDataSource, ProductCellButtonDelegate, PopUpViewDelegate, ShoppingCartTableCellDelegate {
     
     var presenter : ShoppingCartPresentation?
     private var _shoppingList : [ProductDataModel] = [ProductDataModel]()
     private var _suggestedList : [ProductDataModel] = [ProductDataModel]()
-    
+    private var _currentProduct : ProductDataModel = ProductDataModel(id: "", imageURL: "", price: 0, name: "", priceText: "", shortDescription: "", category: "", unitPrice: 0, squareThumbnailURL: "", status: 0, attribute: "", thumbnailURL: "", productCount: 0)
+
     private lazy var headerView : UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -123,6 +124,8 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         return button
     }()
     
+    private lazy var popUpView = PopUpView(frame: .zero)
+    
     @objc func completeOrderTapped(){
         print("tapped")
     }
@@ -130,19 +133,20 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.fetchSuggestedProducts()
+        popUpView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         horizontalCollectionView.dataSource = self
         horizontalCollectionView.delegate = self
         setupUI()
-        _shoppingList = fetchProducts().map({ product in
+        _shoppingList = CoreDataStack.shared.fetchProducts().map({ product in
             ProductDataModel(id: product.id ?? "-1", imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: "", category: "", unitPrice: 0.0, squareThumbnailURL: "", status: 0, attribute: product.productAttr, thumbnailURL: "", productCount: Int(product.count))
         })
         updateBasketPrice()
     }
     
     func updateBasketPrice(){
-        priceLabel.text = "₺\(CoreDataStack.shared.calculateTotalPrice())"
+        priceLabel.text =  "\(NumberFormatterUtility.formatNumber( CoreDataStack.shared.calculateTotalPrice()))"
     }
     
     func setupUI(){
@@ -220,24 +224,32 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         }
     }
     
-    func fetchProducts() -> [Product] {
-        let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
-
-        do {
-            return try CoreDataStack.shared.context.fetch(fetchRequest)
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            return []
-        }
-    }
-    
     @objc func exitButtonTapped(){
         presenter?.back()
     }
     
     @objc func garbageButtonTapped(){
+        view.addSubview(popUpView)
+        //popUpView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        popUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        popUpView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        popUpView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        //popUpView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         print("garbage Tapped")
     }
+    
+    func buttonYesTapped() {
+        CoreDataStack.shared.deleteAllProducts()
+        popUpView.removeFromSuperview()
+        reloadTableView()
+
+    }
+    
+    func buttonNoTapped() {
+        popUpView.removeFromSuperview()
+    }
+
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _suggestedList.count
@@ -252,14 +264,11 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         return cell
     }
     
-    
-    
     func didTapPlusButton(in cell: UICollectionViewCell) {
-        /*
         var indexPathForHorizontal : Int?
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
-        var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
-        */
+        _currentProduct = _suggestedList[indexPathForHorizontal ?? 0]
+        //var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
         
     }
     
@@ -273,6 +282,7 @@ extension ShoppingCartViewController : UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: ShoppingCartTableViewCell.identifier) as? ShoppingCartTableViewCell{
             cell.configure(product: _shoppingList[indexPath.row])
+            cell.delegate = self
             return cell
         }else{
             return UITableViewCell(frame: .zero)
@@ -284,7 +294,39 @@ extension ShoppingCartViewController : UITableViewDelegate, UITableViewDataSourc
     }
     
     func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int) {
+        //print("newCount : \(newCount), product : \(_currentProduct.name ?? "boş")")
+        var indexPathForHorizontal : Int?
+        indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
+        _currentProduct = _suggestedList[indexPathForHorizontal ?? 0]
+                CoreDataStack.shared.addProduct(product: _currentProduct, count: newCount)
+        priceLabel.text =  "\(NumberFormatterUtility.formatNumber( CoreDataStack.shared.calculateTotalPrice()))"
+        reloadTableView()
+    }
+    
+    func tableCellCountUpdated(cell : UITableViewCell,count: Int) {
+        /*
+         var indexPathForHorizontal : Int?
+         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
+         _currentProduct = _suggestedList[indexPathForHorizontal ?? 0]
+         */
+        print("giriş oldu2")
+        var index : Int?
+        index = self.tableView.indexPathForSelectedRow?.row
+        _currentProduct = _shoppingList[index ?? 0]
+        CoreDataStack.shared.addProduct(product: _currentProduct, count: count)
+        priceLabel.text =  "\(NumberFormatterUtility.formatNumber(CoreDataStack.shared.calculateTotalPrice()))"
+        //reloadTableView()
+    }
+    
+    func reloadTableView(){
+        _shoppingList = CoreDataStack.shared.fetchProducts().map({ product in
+            ProductDataModel(id: product.id ?? "-1", imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: "", category: "", unitPrice: 0.0, squareThumbnailURL: "", status: 0, attribute: product.productAttr, thumbnailURL: "", productCount: Int(product.count))
+        })
         
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+         
     }
     
     

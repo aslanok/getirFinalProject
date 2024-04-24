@@ -7,8 +7,13 @@
 
 import UIKit
 
-class ShoppingCartTableViewCell : UITableViewCell{
+protocol ShoppingCartTableCellDelegate : AnyObject{
+    func tableCellCountUpdated(cell : UITableViewCell,count : Int)
+}
 
+class ShoppingCartTableViewCell : UITableViewCell, CountableBasketViewDelegate{
+
+    weak var delegate : ShoppingCartTableCellDelegate?
     public static var identifier : String = "ShoppingCartTableViewCell"
         
     private lazy var productImageView: UIImageView = {
@@ -68,6 +73,7 @@ class ShoppingCartTableViewCell : UITableViewCell{
 
     func setupView(){
         contentView.backgroundColor = .Theme.white
+        countableBasketView.delegate = self
         /*
         contentView.addSubview(priceLabel)
         priceLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
@@ -103,7 +109,12 @@ class ShoppingCartTableViewCell : UITableViewCell{
         countableBasketView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
         countableBasketView.widthAnchor.constraint(equalToConstant: 128).isActive = true
         countableBasketView.heightAnchor.constraint(equalToConstant: 44).isActive = true
-         
+    }
+    
+    func productCountDidUpdate(_ count: Int) {
+        print("tableCell count : \(count)")
+        delegate?.tableCellCountUpdated(cell: self, count: count)
+        
     }
     
     func configure(product : ProductDataModel){

@@ -131,7 +131,13 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .Theme.viewBackgroundColor
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(basketMiniViewTapped))
+        basketMiniView.addGestureRecognizer(tapGesture)
         setupUI()
+    }
+    
+    @objc private func basketMiniViewTapped(){
+        presenter?.goShopingCartScreen()
     }
     
     override func viewWillAppear(_ animated: Bool) {

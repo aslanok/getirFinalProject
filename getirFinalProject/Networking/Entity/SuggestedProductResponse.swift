@@ -10,5 +10,5 @@ import Foundation
 // MARK: - SuggestedProductsResponse
 struct SuggestedProductsResponse: Codable {
     let products: [ProductResponse]
-    let id, name: String
+    let id, name: String?
 }
