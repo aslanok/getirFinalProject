@@ -11,7 +11,7 @@ import CoreData
 protocol MainPageViewContract : UIViewController{
     func suggestedProductsFetched(productList : [ProductDataModel])
     func allProductsFetched(productList : [ProductDataModel])
-
+    func displayTotalPrice(price : Double)
 }
 
 class MainPageViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MainPageViewContract{
@@ -41,43 +41,9 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         label.textColor = .Theme.white
         return label
     }()
-    /*
-    private lazy var basketMiniView : UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 8
-        view.backgroundColor = .Theme.white
-        return view
-    }()
-    */
+    
     private lazy var basketMiniView = BasketMiniView(frame: .zero)
-    /*
-    private lazy var miniBasketImageView : UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "miniBasketIcon"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private lazy var miniBasketAmountLabelView : CustomRoundedView = {
-        let view = CustomRoundedView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .Theme.lightPurple
-        view.cornerRadius = 6
-        view.roundedCorners = [.topRight, .bottomRight]
-        return view
-    }()
-    
-    private lazy var miniBasketAmountLabel : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "₺0,00"
-        label.textColor = .Theme.primaryColor
-        label.font = UIFont(name: "OpenSans-Bold", size: 14)
-        return label
-    }()
-     */
-    
+
     private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -96,8 +62,6 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     private lazy var verticalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        //layout.minimumLineSpacing = 10
-        //layout.minimumInteritemSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
@@ -110,22 +74,27 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter?.viewDidLoad()
         CoreDataStack.shared.deleteAllProducts()
-        
         view.backgroundColor = .Theme.viewBackgroundColor
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(basketMiniViewTapped))
         basketMiniView.addGestureRecognizer(tapGesture)
         basketMiniView.isUserInteractionEnabled = true
         
-        presenter?.fetchSuggestedProducts()
-        presenter?.fetchAllProducts()
+        //presenter?.fetchSuggestedProducts()
+        //presenter?.fetchAllProducts()
         setupUI()
-        basketMiniView.setTotalPrice(price: (CoreDataStack.shared.calculateTotalPrice()))
+        //basketMiniView.setTotalPrice(price: (CoreDataStack.shared.calculateTotalPrice()))
+    }
+    
+    func displayTotalPrice(price: Double) {
+        basketMiniView.setTotalPrice(price: price)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
+        presenter?.viewWillAppear()
+        //basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
     }
     
     @objc private func basketMiniViewTapped(){
@@ -180,18 +149,23 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == horizontalCollectionView{
+            return presenter?.numberOfItems(collectionView: .horizontal) ?? 0
+            /*
             if _suggestedProductList.isEmpty {
                 return 0
             } else {
                 return _suggestedProductList.count
             }
+             */
         }else{
+            /*
             if _allProductList.isEmpty {
                 return 0
             } else {
                 return _allProductList.count 
             }
-
+             */
+            return presenter?.numberOfItems(collectionView: .vertical) ?? 0
         }
     }
     
@@ -200,11 +174,20 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
             fatalError("Unable to dequeue ProductCell")
         }
         if collectionView == horizontalCollectionView{
+            /*
             if _suggestedProductList.isEmpty == false {
                 cell.configure(with: _suggestedProductList[indexPath.row])
             }
         }else{
             if _allProductList.isEmpty == false {
+                cell.configure(with: _allProductList[indexPath.row])
+            }
+             */
+            if presenter?.suggestedProductList().isEmpty == false {
+                cell.configure(with: _suggestedProductList[indexPath.row])
+            }
+        }else{
+            if presenter?.allProductList().isEmpty == false {
                 cell.configure(with: _allProductList[indexPath.row])
             }
         }
@@ -215,32 +198,22 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("didSelect indexPath : \(indexPath.row)")
         if collectionView == horizontalCollectionView{
+            presenter?.didSelectItem(collectionView: .horizontal, indexPath: indexPath.row)
+            /*
             let product = _suggestedProductList[indexPath.row]
             _currentProduct = product
             _currentProduct.setProductCount(count: CoreDataStack.shared.fetchProductCount(byID: _currentProduct.id) ?? 0)
             presenter?.goPresentDetailPage(product: _currentProduct)
+             */
         }else{
+            presenter?.didSelectItem(collectionView: .vertical, indexPath: indexPath.row)
+            /*
             let product = _allProductList[indexPath.row]
             _currentProduct = product
             _currentProduct.setProductCount(count: CoreDataStack.shared.fetchProductCount(byID: _currentProduct.id) ?? 0)
             presenter?.goPresentDetailPage(product: _currentProduct)
+             */
         }
-        
-        /*
-        var indexPathForHorizontal : Int?
-        var indexPathForVertical : Int?
-        indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
-        indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
-        
-        var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
-        
-        if indexPathForHorizontal == nil{
-            product = _allProductList[indexPathForVertical ?? 0]}
-        else{
-            product = _suggestedProductList[indexPathForHorizontal ?? 0]
-        }
-         */
-        //presenter?.goPresentDetailPage(product: product)
     }
 }
 
@@ -264,21 +237,26 @@ extension MainPageViewController : ProductCellButtonDelegate{
         var indexPathForVertical : Int?
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
         indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
-        
+        presenter?.plusButtonTapped( indexPathHorizontal: indexPathForHorizontal, indexPathVertical: indexPathForVertical)
+        /*
         if indexPathForHorizontal == nil{
-            _currentProduct = _allProductList[indexPathForVertical ?? 0]}
+            presenter?.plusButtonTapped(collectionView: .horizontal, indexPathHorizontal: indexPathForHorizontal, indexPathVertical: nil)
+            //_currentProduct = _allProductList[indexPathForVertical ?? 0]}
         else{
             _currentProduct = _suggestedProductList[indexPathForHorizontal ?? 0]
         }
-        //print("product : \(_currentProduct.name)")
-        //addProduct(product: product)
-        //presenter?.goPresentDetailPage(product: product)
+         */
+         
     }
+    
     func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int) {
+        //print("triggered count : \(newCount)")
+        presenter?.productCountChanged(count: newCount)
+        /*
         _count = newCount
         CoreDataStack.shared.addProduct(product: _currentProduct, count: _count)
         basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
-        //print("currentItem : \(_currentProduct.name),newCount : \(newCount)")
+         */
     }
     
 }

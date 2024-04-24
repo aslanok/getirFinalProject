@@ -78,8 +78,6 @@ class CoreDataStack {
             print("Could not fetch or save. \(error), \(error.userInfo)")
         }
     }
-
-
     
     func fetchProducts() -> [Product] {
         let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()

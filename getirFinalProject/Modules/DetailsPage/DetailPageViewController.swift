@@ -8,7 +8,8 @@
 import UIKit
 
 protocol DetailPageViewContract : UIViewController {
-    
+    func displayTotalPrice(price : Double)
+    func adjustComponents(count : Int)
 }
 
 
@@ -122,31 +123,24 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
         return button
     }()
     
-    @objc func addToBasketButtonTapped(){
-        productBasketView.setInitialCount(count: 1)
-    }
     
     private lazy var productBasketView = CountableBasketView(frame: .zero, initialCount: product.getProductCount() )
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .Theme.viewBackgroundColor
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(basketMiniViewTapped))
         basketMiniView.addGestureRecognizer(tapGesture)
         setupUI()
     }
     
-    @objc private func basketMiniViewTapped(){
-        presenter?.goShopingCartScreen()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
-
+        presenter?.viewWillAppear()
+        //basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
     }
     
     func setupUI(){
+        view.backgroundColor = .Theme.viewBackgroundColor
         view.addSubview(headerView)
         headerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -231,6 +225,32 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
         addToBasketButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5).isActive = true
     }
     
+    func displayTotalPrice(price: Double) {
+        basketMiniView.setTotalPrice(price: price)
+    }
+    
+    @objc func addToBasketButtonTapped(){
+        productBasketView.setInitialCount(count: 1)
+    }
+    
+    @objc private func basketMiniViewTapped(){
+        presenter?.goShopingCartScreen()
+    }
+    
+    func adjustComponents(count: Int) {
+        if count > 0 {
+            basketMiniView.isHidden = false
+            productBasketView.isHidden = false
+            addToBasketButton.isHidden = true
+            addToBasketButton.isUserInteractionEnabled = false
+        }else {
+            basketMiniView.isHidden = true
+            productBasketView.isHidden = true
+            addToBasketButton.isHidden = false
+            addToBasketButton.isUserInteractionEnabled = true
+        }
+    }
+    
     @objc func exitButtonTapped(){
         presenter?.back()
     }
@@ -239,6 +259,8 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
 
 extension DetailPageViewController : CountableBasketViewDelegate {
     func productCountDidUpdate(_ count: Int) {
+        presenter?.productCountUpdated(count: count)
+        /*
         CoreDataStack.shared.addProduct(product: product, count: count)
         basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
         if count > 0 {
@@ -252,6 +274,7 @@ extension DetailPageViewController : CountableBasketViewDelegate {
             addToBasketButton.isHidden = false
             addToBasketButton.isUserInteractionEnabled = true
         }
+         */
     }
     
     

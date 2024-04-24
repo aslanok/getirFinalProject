@@ -44,6 +44,8 @@
 		BED4BBCA2BCF2DC0008FA153 /* CustomRoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBC92BCF2DC0008FA153 /* CustomRoundedView.swift */; };
 		BED4BBCC2BCF3374008FA153 /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4BBCB2BCF3374008FA153 /* ProductCollectionViewCell.swift */; };
 		BEF5B6752BD976F000407DAB /* PopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B6742BD976F000407DAB /* PopUpView.swift */; };
+		BEF5B6772BD98E0500407DAB /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B6762BD98E0500407DAB /* LoadingView.swift */; };
+		BEF5B6792BD99D1100407DAB /* CollectionViewEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF5B6782BD99D1100407DAB /* CollectionViewEnums.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		BED4BBC92BCF2DC0008FA153 /* CustomRoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRoundedView.swift; sourceTree = "<group>"; };
 		BED4BBCB2BCF3374008FA153 /* ProductCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewCell.swift; sourceTree = "<group>"; };
 		BEF5B6742BD976F000407DAB /* PopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpView.swift; sourceTree = "<group>"; };
+		BEF5B6762BD98E0500407DAB /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		BEF5B6782BD99D1100407DAB /* CollectionViewEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewEnums.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,7 @@
 			children = (
 				BE22185E2BD1E51B00977CE2 /* NetworkingEnums.swift */,
 				BE0BFCA82BD81B8200FC2285 /* LayoutOrientationEnums.swift */,
+				BEF5B6782BD99D1100407DAB /* CollectionViewEnums.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -250,6 +255,7 @@
 				BE0BFCA62BD8152000FC2285 /* CustomRoundedButton.swift */,
 				BE0BFCAA2BD8557900FC2285 /* NumberFormatterUtility.swift */,
 				BEF5B6742BD976F000407DAB /* PopUpView.swift */,
+				BEF5B6762BD98E0500407DAB /* LoadingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -338,6 +344,7 @@
 				BED4BBBD2BCF1F1A008FA153 /* MainPagePresenter.swift in Sources */,
 				BE3C283E2BD54E8E00876A66 /* CoreDataStack.swift in Sources */,
 				BE22185A2BD1E23500977CE2 /* ProductResponse.swift in Sources */,
+				BEF5B6772BD98E0500407DAB /* LoadingView.swift in Sources */,
 				BEC2D2E72BD2A6B3007A982C /* DetailPageRouter.swift in Sources */,
 				BED4BBB92BCF1DBF008FA153 /* MainPageViewController.swift in Sources */,
 				BED4BBCC2BCF3374008FA153 /* ProductCollectionViewCell.swift in Sources */,
@@ -352,6 +359,7 @@
 				BEC2D2F02BD3130B007A982C /* CountableBasketView.swift in Sources */,
 				BEC2D2EE2BD2D1BB007A982C /* ProductDataModel.swift in Sources */,
 				BEC2D2F62BD33A63007A982C /* ShoppingList.xcdatamodeld in Sources */,
+				BEF5B6792BD99D1100407DAB /* CollectionViewEnums.swift in Sources */,
 				BE2FB3D72BD7C9DF00B3A80E /* ShoppingCartInteractor.swift in Sources */,
 				BEC2D2E92BD2AADD007A982C /* DetailPageViewController.swift in Sources */,
 				BED4BBC02BCF21A5008FA153 /* UIColor+Extensions.swift in Sources */,

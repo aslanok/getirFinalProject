@@ -13,8 +13,22 @@ protocol MainPageRouting{
 }
 
 
-class MainPageRouter : MainPageRouting{
+final class MainPageRouter : MainPageRouting{
     
+    weak var viewController : MainPageViewController?
+    
+    static func createViewController() -> MainPageViewController {
+        let view = MainPageViewController()
+        let interactor = MainPageInteractor()
+        let router = MainPageRouter()
+        let presenter = MainPagePresenter(router: router, view: view, interactor: interactor)
+        
+        view.presenter = presenter
+        interactor.output = presenter
+        presenter.output = view
+        return view
+    }
+    /*
     var viewController : UIViewController {
         let view = MainPageViewController()
         let interactor = MainPageInteractor()
@@ -26,10 +40,11 @@ class MainPageRouter : MainPageRouting{
         presenter.output = view
         return view
     }
+     */
     
     func presentDetailPage(product : ProductDataModel,from view: UIViewController?) {
-        let router = DetailPageRouter()
-        view?.present(router.viewController(product: product), animated: true)
+        //let router = DetailPageRouter()
+        view?.present(DetailPageRouter.viewController(product: product), animated: true)
     }
     
     func presentShoppingCart(from view: UIViewController) {
