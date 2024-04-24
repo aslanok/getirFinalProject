@@ -29,12 +29,12 @@ class CoreDataStack {
         let context = CoreDataStack.shared.context
         let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", productID)
-        fetchRequest.fetchLimit = 1  // We're only interested in one product with this ID
+        fetchRequest.fetchLimit = 1
 
         do {
             let results = try context.fetch(fetchRequest)
             if let product = results.first {
-                return Int(product.count)  // Assuming 'count' is stored as Int16 in Core Data
+                return Int(product.count) 
             } else {
                 print("No product found with ID \(productID)")
                 return nil  // No product found
@@ -69,11 +69,8 @@ class CoreDataStack {
                 newProduct.imageURL = product.imageURL ?? product.squareThumbnailURL ?? product.thumbnailURL ?? ""
                 newProduct.count = Int16(count)
                 newProduct.productAttr = product.attribute ?? ""
-                print("New product added with count \(count).")
             }
-            // Save the context after making changes
             try context.save()
-            print("Changes successfully saved to Core Data.")
         } catch let error as NSError {
             print("Could not fetch or save. \(error), \(error.userInfo)")
         }

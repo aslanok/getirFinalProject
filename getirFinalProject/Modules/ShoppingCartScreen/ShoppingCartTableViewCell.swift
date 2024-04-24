@@ -111,10 +111,9 @@ class ShoppingCartTableViewCell : UITableViewCell, CountableBasketViewDelegate{
         countableBasketView.heightAnchor.constraint(equalToConstant: 44).isActive = true
     }
     
-    func productCountDidUpdate(_ count: Int) {
+    func countableBasketCountUpdated(_ count: Int) {
         print("tableCell count : \(count)")
         delegate?.tableCellCountUpdated(cell: self, count: count)
-        
     }
     
     func configure(product : ProductDataModel){
@@ -122,6 +121,7 @@ class ShoppingCartTableViewCell : UITableViewCell, CountableBasketViewDelegate{
         priceLabel.text = product.priceText ?? ""
         productNameLabel.text = product.name ?? ""
         attributeLabel.text = product.attribute ?? ""
+        //countableBasketView.setCountLabelText(count: product.getProductCount())
         countableBasketView.setInitialCount(count: product.getProductCount())
     }
 

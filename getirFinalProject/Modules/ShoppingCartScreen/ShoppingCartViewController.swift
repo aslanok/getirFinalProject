@@ -9,14 +9,15 @@ import UIKit
 import CoreData
 
 protocol ShoppingCartViewContract : UIViewController {
-    func suggestedProductsFetched(productList : [ProductDataModel])
+    //func suggestedProductsFetched(productList : [ProductDataModel])
 }
 
-class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UICollectionViewDelegate, UICollectionViewDataSource, ProductCellButtonDelegate, PopUpViewDelegate, ShoppingCartTableCellDelegate {
+//class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UICollectionViewDelegate, UICollectionViewDataSource, ProductCellButtonDelegate, PopUpViewDelegate, ShoppingCartTableCellDelegate {
+class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, PopUpViewDelegate, ShoppingCartTableCellDelegate {
     
     var presenter : ShoppingCartPresentation?
     private var _shoppingList : [ProductDataModel] = [ProductDataModel]()
-    private var _suggestedList : [ProductDataModel] = [ProductDataModel]()
+    //private var _suggestedList : [ProductDataModel] = [ProductDataModel]()
     private var _currentProduct : ProductDataModel = ProductDataModel(id: "", imageURL: "", price: 0, name: "", priceText: "", shortDescription: "", category: "", unitPrice: 0, squareThumbnailURL: "", status: 0, attribute: "", thumbnailURL: "", productCount: 0)
 
     private lazy var headerView : UIView = {
@@ -75,7 +76,7 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         label.numberOfLines = 1
         return label
     }()
-    
+    /*
     private lazy var horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -90,6 +91,7 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         collectionView.register(ProductCell.self, forCellWithReuseIdentifier: "ProductCell")
         return collectionView
     }()
+     */
     
     private lazy var bottomView : UIView = {
         let view = UIView()
@@ -132,12 +134,14 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.fetchSuggestedProducts()
+        //presenter?.fetchSuggestedProducts()
         popUpView.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        /*
         horizontalCollectionView.dataSource = self
         horizontalCollectionView.delegate = self
+         */
         setupUI()
         _shoppingList = CoreDataStack.shared.fetchProducts().map({ product in
             ProductDataModel(id: product.id ?? "-1", imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: "", category: "", unitPrice: 0.0, squareThumbnailURL: "", status: 0, attribute: product.productAttr, thumbnailURL: "", productCount: Int(product.count))
@@ -184,13 +188,13 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         suggestedProductsLabel.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 20).isActive = true
         suggestedProductsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
         suggestedProductsLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
+        /*
         view.addSubview(horizontalCollectionView)
         horizontalCollectionView.topAnchor.constraint(equalTo: suggestedProductsLabel.bottomAnchor, constant: 12).isActive = true
         horizontalCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         horizontalCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         horizontalCollectionView.heightAnchor.constraint(equalToConstant: 185).isActive = true
-        
+        */
         view.addSubview(bottomView)
         bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -215,7 +219,7 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         //suggestedProductsLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
         
     }
-    
+    /*
     func suggestedProductsFetched(productList: [ProductDataModel]) {
         _suggestedList = productList
         print(_suggestedList)
@@ -223,6 +227,7 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
             self.horizontalCollectionView.reloadData()
         }
     }
+     */
     
     @objc func exitButtonTapped(){
         presenter?.back()
@@ -243,14 +248,14 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         CoreDataStack.shared.deleteAllProducts()
         popUpView.removeFromSuperview()
         reloadTableView()
-
+        updateBasketPrice()
     }
     
     func buttonNoTapped() {
         popUpView.removeFromSuperview()
     }
 
-    
+    /*
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return _suggestedList.count
     }
@@ -268,9 +273,11 @@ class ShoppingCartViewController: UIViewController, ShoppingCartViewContract, UI
         var indexPathForHorizontal : Int?
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
         _currentProduct = _suggestedList[indexPathForHorizontal ?? 0]
+        print("currentProductName : \(_currentProduct.name ?? "bos")")
         //var product = ProductDataModel(id: "", imageURL: nil, price: nil, name: nil, priceText: nil, shortDescription: nil, category: nil, unitPrice: nil, squareThumbnailURL: nil, status: nil, attribute: nil, thumbnailURL: nil, productCount: 0)
         
     }
+    */
     
 }
 
@@ -292,7 +299,7 @@ extension ShoppingCartViewController : UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
-    
+    /*
     func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int) {
         //print("newCount : \(newCount), product : \(_currentProduct.name ?? "boş")")
         var indexPathForHorizontal : Int?
@@ -302,17 +309,22 @@ extension ShoppingCartViewController : UITableViewDelegate, UITableViewDataSourc
         priceLabel.text =  "\(NumberFormatterUtility.formatNumber( CoreDataStack.shared.calculateTotalPrice()))"
         reloadTableView()
     }
-    
+    */
     func tableCellCountUpdated(cell : UITableViewCell,count: Int) {
         /*
          var indexPathForHorizontal : Int?
          indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
          _currentProduct = _suggestedList[indexPathForHorizontal ?? 0]
          */
-        print("giriş oldu2")
         var index : Int?
-        index = self.tableView.indexPathForSelectedRow?.row
+        index = self.tableView.indexPath(for: cell)?.row
         _currentProduct = _shoppingList[index ?? 0]
+        print("currentProduct : \(_currentProduct.name) and count : \(_currentProduct.getProductCount())")
+        /*
+        if _currentProduct.getProductCount() == 0{
+            _shoppingList.remove(at: index ?? 0)
+        }
+         */
         CoreDataStack.shared.addProduct(product: _currentProduct, count: count)
         priceLabel.text =  "\(NumberFormatterUtility.formatNumber(CoreDataStack.shared.calculateTotalPrice()))"
         //reloadTableView()
@@ -331,7 +343,7 @@ extension ShoppingCartViewController : UITableViewDelegate, UITableViewDataSourc
     
     
 }
-
+/*
 extension ShoppingCartViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth: CGFloat = 110
@@ -339,4 +351,4 @@ extension ShoppingCartViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: cellWidth, height: cellHeight)
     }
 }
-
+*/

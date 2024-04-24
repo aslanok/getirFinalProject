@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CountableBasketViewDelegate: AnyObject {
-    func productCountDidUpdate(_ count: Int)
+    func countableBasketCountUpdated(_ count: Int)
 }
 
 class CountableBasketView : UIView{
@@ -21,7 +21,6 @@ class CountableBasketView : UIView{
         }
     }
     private var layoutOrientation: LayoutOrientation
-
 
     init(frame: CGRect, initialCount: Int = 1, orientation: LayoutOrientation = .horizontal) {
         self.layoutOrientation = orientation
@@ -133,14 +132,20 @@ class CountableBasketView : UIView{
         productCount += 1
     }
     
+    //private var currentCount = 1
+    
     func updateUI(){
-        delegate?.productCountDidUpdate(productCount)
+        delegate?.countableBasketCountUpdated(productCount)
         countLabel.text = "\(productCount)"
         if productCount > 1{
             decrementButton.setImage(UIImage(named: "minusSign"), for: .normal)
         } else{
             decrementButton.setImage(UIImage(named: "garbageIcon"), for: .normal)
         }
+    }
+    
+    func setCountLabelText(count : Int){
+        countLabel.text = "\(productCount)"
     }
     
     func setInitialCount(count : Int){

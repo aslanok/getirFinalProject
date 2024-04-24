@@ -154,7 +154,7 @@ class ProductCell: UICollectionViewCell, CountableBasketViewDelegate {
         print("plus Tapped")
     }
     
-    func productCountDidUpdate(_ count: Int) {
+    func countableBasketCountUpdated(_ count: Int) {
         //print("currentCount : \(count)")
         delegate?.productCountDidUpdate(in: self, newCount: count)
         if count < 1{

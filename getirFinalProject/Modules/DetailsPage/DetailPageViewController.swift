@@ -258,7 +258,7 @@ class DetailPageViewController : UIViewController, DetailPageViewContract{
 }
 
 extension DetailPageViewController : CountableBasketViewDelegate {
-    func productCountDidUpdate(_ count: Int) {
+    func countableBasketCountUpdated(_ count: Int) {
         presenter?.productCountUpdated(count: count)
         /*
         CoreDataStack.shared.addProduct(product: product, count: count)

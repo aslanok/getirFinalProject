@@ -31,7 +31,7 @@ class ShoppingCartPresenter : ShoppingCartPresentation, ShoppingCartInteractorOu
     
     func setFetchSuggestedProductSucceed(result: [ProductDataModel]) {
         print("result:\(result)")
-        output.suggestedProductsFetched(productList: result)
+        //output.suggestedProductsFetched(productList: result)
     }
     
     func setFetchSuggestedProductFailed(error: String) {

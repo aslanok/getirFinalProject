@@ -41,6 +41,7 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
     
     
     func viewDidLoad() {
+        LoadingView.shared.startLoading()
         fetchAllProducts()
         fetchSuggestedProducts()
         output.displayTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
@@ -48,6 +49,7 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
     
     func viewWillAppear(){
         output.displayTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
+        
     }
     
     func didSelectItem(collectionView: CollectionViewEnums, indexPath: Int) {
@@ -112,7 +114,9 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
             ProductDataModel(id: product.id, imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: product.shortDescription, category: product.category, unitPrice: product.unitPrice, squareThumbnailURL: product.squareThumbnailURL, status: product.status, attribute: product.attribute, thumbnailURL: product.thumbnailURL, productCount: 0)
         }
         _allProductList = modelledList
-        output.allProductsFetched(productList: modelledList)
+        output.reloadVerticalCollectionView()
+        LoadingView.shared.hideLoading()
+        //output.allProductsFetched(productList: modelledList)
     }
     
     func setFetchAllProductDataFailed(error: String) {
@@ -125,7 +129,8 @@ class MainPagePresenter : MainPagePresentation, MainPageInteractorOutput{
             ProductDataModel(id: product.id, imageURL: product.imageURL, price: product.price, name: product.name, priceText: product.priceText, shortDescription: product.shortDescription, category: product.category, unitPrice: product.unitPrice, squareThumbnailURL: product.squareThumbnailURL, status: product.status, attribute: product.attribute, thumbnailURL: product.thumbnailURL, productCount: 0)
         }
         _suggestedProductList = modelledList
-        output.suggestedProductsFetched(productList: modelledList)
+        output.reloadHorziontalCollectionView()
+        //output.suggestedProductsFetched(productList: modelledList)
     }
     
     func suggestedProductList() -> [ProductDataModel] {

@@ -9,9 +9,11 @@ import UIKit
 import CoreData
 
 protocol MainPageViewContract : UIViewController{
-    func suggestedProductsFetched(productList : [ProductDataModel])
-    func allProductsFetched(productList : [ProductDataModel])
+    //func suggestedProductsFetched(productList : [ProductDataModel])
+    //func allProductsFetched(productList : [ProductDataModel])
     func displayTotalPrice(price : Double)
+    func reloadHorziontalCollectionView()
+    func reloadVerticalCollectionView()
 }
 
 class MainPageViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MainPageViewContract{
@@ -80,11 +82,7 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(basketMiniViewTapped))
         basketMiniView.addGestureRecognizer(tapGesture)
         basketMiniView.isUserInteractionEnabled = true
-        
-        //presenter?.fetchSuggestedProducts()
-        //presenter?.fetchAllProducts()
         setupUI()
-        //basketMiniView.setTotalPrice(price: (CoreDataStack.shared.calculateTotalPrice()))
     }
     
     func displayTotalPrice(price: Double) {
@@ -94,7 +92,21 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter?.viewWillAppear()
-        //basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
+        
+        reloadVerticalCollectionView()
+        reloadHorziontalCollectionView()
+    }
+    
+    func reloadVerticalCollectionView() {
+        DispatchQueue.main.async {
+            self.verticalCollectionView.reloadData()
+        }
+    }
+    
+    func reloadHorziontalCollectionView() {
+        DispatchQueue.main.async {
+            self.horizontalCollectionView.reloadData()
+        }
     }
     
     @objc private func basketMiniViewTapped(){
@@ -131,40 +143,14 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         verticalCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
     }
-    
-    func suggestedProductsFetched(productList: [ProductDataModel]) {
-        _suggestedProductList = productList
-        DispatchQueue.main.async {
-            self.horizontalCollectionView.reloadData()
-        }
-    }
-    
-    func allProductsFetched(productList : [ProductDataModel]){
-        _allProductList = productList
-        DispatchQueue.main.async {
-            self.verticalCollectionView.reloadData()
-        }
-    }
 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == horizontalCollectionView{
             return presenter?.numberOfItems(collectionView: .horizontal) ?? 0
-            /*
-            if _suggestedProductList.isEmpty {
-                return 0
-            } else {
-                return _suggestedProductList.count
-            }
-             */
+            
         }else{
-            /*
-            if _allProductList.isEmpty {
-                return 0
-            } else {
-                return _allProductList.count 
-            }
-             */
+            
             return presenter?.numberOfItems(collectionView: .vertical) ?? 0
         }
     }
@@ -174,21 +160,14 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
             fatalError("Unable to dequeue ProductCell")
         }
         if collectionView == horizontalCollectionView{
-            /*
-            if _suggestedProductList.isEmpty == false {
-                cell.configure(with: _suggestedProductList[indexPath.row])
+            
+          
+            if let suggestedProducts = presenter?.suggestedProductList(), !suggestedProducts.isEmpty {
+                cell.configure(with: suggestedProducts[indexPath.row])
             }
         }else{
-            if _allProductList.isEmpty == false {
-                cell.configure(with: _allProductList[indexPath.row])
-            }
-             */
-            if presenter?.suggestedProductList().isEmpty == false {
-                cell.configure(with: _suggestedProductList[indexPath.row])
-            }
-        }else{
-            if presenter?.allProductList().isEmpty == false {
-                cell.configure(with: _allProductList[indexPath.row])
+            if let allListProducts = presenter?.allProductList(), !allListProducts.isEmpty {
+                cell.configure(with: allListProducts[indexPath.row])
             }
         }
         cell.delegate = self
@@ -199,20 +178,10 @@ class MainPageViewController : UIViewController, UICollectionViewDelegate, UICol
         print("didSelect indexPath : \(indexPath.row)")
         if collectionView == horizontalCollectionView{
             presenter?.didSelectItem(collectionView: .horizontal, indexPath: indexPath.row)
-            /*
-            let product = _suggestedProductList[indexPath.row]
-            _currentProduct = product
-            _currentProduct.setProductCount(count: CoreDataStack.shared.fetchProductCount(byID: _currentProduct.id) ?? 0)
-            presenter?.goPresentDetailPage(product: _currentProduct)
-             */
+           
         }else{
             presenter?.didSelectItem(collectionView: .vertical, indexPath: indexPath.row)
-            /*
-            let product = _allProductList[indexPath.row]
-            _currentProduct = product
-            _currentProduct.setProductCount(count: CoreDataStack.shared.fetchProductCount(byID: _currentProduct.id) ?? 0)
-            presenter?.goPresentDetailPage(product: _currentProduct)
-             */
+            
         }
     }
 }
@@ -238,25 +207,12 @@ extension MainPageViewController : ProductCellButtonDelegate{
         indexPathForHorizontal = self.horizontalCollectionView.indexPath(for: cell)?.row
         indexPathForVertical = self.verticalCollectionView.indexPath(for: cell)?.row
         presenter?.plusButtonTapped( indexPathHorizontal: indexPathForHorizontal, indexPathVertical: indexPathForVertical)
-        /*
-        if indexPathForHorizontal == nil{
-            presenter?.plusButtonTapped(collectionView: .horizontal, indexPathHorizontal: indexPathForHorizontal, indexPathVertical: nil)
-            //_currentProduct = _allProductList[indexPathForVertical ?? 0]}
-        else{
-            _currentProduct = _suggestedProductList[indexPathForHorizontal ?? 0]
-        }
-         */
          
     }
     
     func productCountDidUpdate(in cell: UICollectionViewCell, newCount: Int) {
-        //print("triggered count : \(newCount)")
         presenter?.productCountChanged(count: newCount)
-        /*
-        _count = newCount
-        CoreDataStack.shared.addProduct(product: _currentProduct, count: _count)
-        basketMiniView.setTotalPrice(price: CoreDataStack.shared.calculateTotalPrice())
-         */
+       
     }
     
 }
